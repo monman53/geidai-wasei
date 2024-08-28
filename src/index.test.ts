@@ -1,3 +1,3 @@
-test('test', () => {
-    expect(true);
+test("test", () => {
+  expect(true);
 });

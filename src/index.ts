@@ -1,2 +1,2 @@
-const hoge = 3
-console.log(hoge)
+const hoge = 3;
+console.log(hoge);
