@@ -68,3 +68,33 @@ test("pitch", () => {
   expect(new Note(0, 5, -1).getPitch()).toBe(8);
   expect(new Note(0, 6, -1).getPitch()).toBe(10);
 });
+
+test("pitch-without-accidental", () => {
+  expect(new Note(-1, 0, 0).getPitch(false)).toBe(-12);
+  expect(new Note(0, 0, 0).getPitch(false)).toBe(0);
+  expect(new Note(1, 0, 0).getPitch(false)).toBe(12);
+
+  expect(new Note(0, 0, 1).getPitch(false)).toBe(0);
+  expect(new Note(0, 1, 1).getPitch(false)).toBe(2);
+  expect(new Note(0, 2, 1).getPitch(false)).toBe(4);
+  expect(new Note(0, 3, 1).getPitch(false)).toBe(5);
+  expect(new Note(0, 4, 1).getPitch(false)).toBe(7);
+  expect(new Note(0, 5, 1).getPitch(false)).toBe(9);
+  expect(new Note(0, 6, 1).getPitch(false)).toBe(11);
+
+  expect(new Note(0, 0, -1).getPitch(false)).toBe(0);
+  expect(new Note(0, 1, -1).getPitch(false)).toBe(2);
+  expect(new Note(0, 2, -1).getPitch(false)).toBe(4);
+  expect(new Note(0, 3, -1).getPitch(false)).toBe(5);
+  expect(new Note(0, 4, -1).getPitch(false)).toBe(7);
+  expect(new Note(0, 5, -1).getPitch(false)).toBe(9);
+  expect(new Note(0, 6, -1).getPitch(false)).toBe(11);
+});
+
+test("global-position", () => {
+  expect(new Note(0, 0, 0).getGlobalPosition()).toBe(0);
+  expect(new Note(0, 5, 0).getGlobalPosition()).toBe(5);
+  expect(new Note(-1, 5, 0).getGlobalPosition()).toBe(-2);
+  expect(new Note(1, 5, 0).getGlobalPosition()).toBe(12);
+  expect(new Note(1, 5, 1).getGlobalPosition()).toBe(12);
+});
