@@ -1,4 +1,4 @@
-import { Accidental, Note, Octave, Position } from "./note";
+import { Note } from "./note";
 
 test("construction", () => {
   new Note(0, 0, 0); // C4
@@ -31,13 +31,9 @@ test("construction", () => {
   new Note(+3, 0, 0); // C7
 
   for (let octave = -4; octave <= 3; octave++) {
-    for (let position = 0; position <= 11; position++) {
+    for (let position = 0; position <= 6; position++) {
       for (let accidental = -2; accidental <= 2; accidental++) {
-        new Note(
-          octave as Octave,
-          position as Position,
-          accidental as Accidental,
-        );
+        new Note(octave, position, accidental);
       }
     }
   }
