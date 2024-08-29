@@ -38,3 +38,33 @@ test("construction", () => {
     }
   }
 });
+
+test("pitch", () => {
+  expect(new Note(-1, 0, 0).getPitch()).toBe(-12);
+  expect(new Note(0, 0, 0).getPitch()).toBe(0);
+  expect(new Note(1, 0, 0).getPitch()).toBe(12);
+
+  expect(new Note(0, 0, 0).getPitch()).toBe(0);
+  expect(new Note(0, 1, 0).getPitch()).toBe(2);
+  expect(new Note(0, 2, 0).getPitch()).toBe(4);
+  expect(new Note(0, 3, 0).getPitch()).toBe(5);
+  expect(new Note(0, 4, 0).getPitch()).toBe(7);
+  expect(new Note(0, 5, 0).getPitch()).toBe(9);
+  expect(new Note(0, 6, 0).getPitch()).toBe(11);
+
+  expect(new Note(0, 0, 1).getPitch()).toBe(1);
+  expect(new Note(0, 1, 1).getPitch()).toBe(3);
+  expect(new Note(0, 2, 1).getPitch()).toBe(5);
+  expect(new Note(0, 3, 1).getPitch()).toBe(6);
+  expect(new Note(0, 4, 1).getPitch()).toBe(8);
+  expect(new Note(0, 5, 1).getPitch()).toBe(10);
+  expect(new Note(0, 6, 1).getPitch()).toBe(12);
+
+  expect(new Note(0, 0, -1).getPitch()).toBe(-1);
+  expect(new Note(0, 1, -1).getPitch()).toBe(1);
+  expect(new Note(0, 2, -1).getPitch()).toBe(3);
+  expect(new Note(0, 3, -1).getPitch()).toBe(4);
+  expect(new Note(0, 4, -1).getPitch()).toBe(6);
+  expect(new Note(0, 5, -1).getPitch()).toBe(8);
+  expect(new Note(0, 6, -1).getPitch()).toBe(10);
+});

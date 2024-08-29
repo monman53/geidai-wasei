@@ -21,4 +21,9 @@ export class Note {
     assert(position >= 0 && position < 7);
     assert(accidental >= -2 && accidental <= 2);
   }
+
+  getPitch = () => {
+    const pitchPosition = this.position * 2 + (this.position > 2 ? -1 : 0);
+    return this.octave * 12 + pitchPosition + this.accidental;
+  };
 }
