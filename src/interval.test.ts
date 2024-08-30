@@ -343,3 +343,24 @@ test.each([
   [fm4, d5, 5, false, false, false, false, true, 1],
   [gm4, e5, 5, false, false, false, false, true, 1],
 ])("6-%#", validator);
+
+test.each([
+  // Minor
+  [d4, c5, 6, false, true, false, false, false, 0],
+  [e4, d5, 6, false, true, false, false, false, 0],
+  [g4, f5, 6, false, true, false, false, false, 0],
+  [a4, g5, 6, false, true, false, false, false, 0],
+  [b4, a5, 6, false, true, false, false, false, 0],
+  // Major
+  [c4, b4, 6, false, false, true, false, false, 0],
+  [f4, e5, 6, false, false, true, false, false, 0],
+  // Diminished
+  [dp4, c5, 6, false, false, false, true, false, -1],
+  [ep4, d5, 6, false, false, false, true, false, -1],
+  [gp4, f5, 6, false, false, false, true, false, -1],
+  [ap4, g5, 6, false, false, false, true, false, -1],
+  [bp4, a5, 6, false, false, false, true, false, -1],
+  // Augmented
+  [cm4, b4, 6, false, false, false, false, true, 1],
+  [fm4, e5, 6, false, false, false, false, true, 1],
+])("7-%#", validator);
