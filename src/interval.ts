@@ -2,17 +2,17 @@ import { Note } from "./note";
 
 export class Interval {
   public readonly degree: number;
-  private internalDegree: number;
-  private naturalPitchDiff: number;
-  private pitchWidth: number;
-
+  public readonly octave: number;
   public readonly isPerfect: boolean;
   public readonly isMajor: boolean;
   public readonly isMinor: boolean;
   public readonly isAugmented: boolean;
   public readonly isDiminished: boolean;
   public readonly shift: number; // For augmented/diminished intervals
+  private naturalPitchDiff: number;
+  private pitchWidth: number;
   constructor(a: Note, b: Note) {
+    // Make b > a
     if (a.getGlobalPosition() > b.getGlobalPosition()) {
       // Swap
       const tmp = a;
@@ -20,9 +20,9 @@ export class Interval {
       b = tmp;
     }
 
-    this.degree = b.getGlobalPosition() - a.getGlobalPosition();
+    this.degree = (b.getGlobalPosition() - a.getGlobalPosition()) % 7;
+    this.octave = (b.getGlobalPosition() - a.getGlobalPosition()) / 7;
 
-    this.internalDegree = this.degree % 7;
     this.naturalPitchDiff = b.getPitch(false) - a.getPitch(false);
     this.pitchWidth = Math.abs(b.getPitch() - a.getPitch());
 
@@ -34,37 +34,35 @@ export class Interval {
     this.shift = 0;
 
     const perfectType =
-      this.internalDegree === 0 ||
-      this.internalDegree === 3 ||
-      this.internalDegree === 4;
+      this.degree === 0 || this.degree === 3 || this.degree === 4;
 
     const shift = (() => {
       const shift = this.pitchWidth - this.naturalPitchDiff;
       // Perfect intervals
-      if (this.internalDegree === 0) {
+      if (this.degree === 0) {
         return shift;
       }
-      if (this.internalDegree === 3 && this.naturalPitchDiff === 5) {
+      if (this.degree === 3 && this.naturalPitchDiff === 5) {
         return shift;
       }
-      if (this.internalDegree === 4 && this.naturalPitchDiff === 7) {
+      if (this.degree === 4 && this.naturalPitchDiff === 7) {
         return shift;
       }
-      if (this.internalDegree === 4 && this.naturalPitchDiff === 6) {
+      if (this.degree === 4 && this.naturalPitchDiff === 6) {
         return shift - 1;
       }
 
       // Minor intervals
-      if (this.internalDegree === 1 && this.naturalPitchDiff === 1) {
+      if (this.degree === 1 && this.naturalPitchDiff === 1) {
         return shift;
       }
-      if (this.internalDegree === 2 && this.naturalPitchDiff === 3) {
+      if (this.degree === 2 && this.naturalPitchDiff === 3) {
         return shift;
       }
-      if (this.internalDegree === 5 && this.naturalPitchDiff === 8) {
+      if (this.degree === 5 && this.naturalPitchDiff === 8) {
         return shift;
       }
-      if (this.internalDegree === 6 && this.naturalPitchDiff === 10) {
+      if (this.degree === 6 && this.naturalPitchDiff === 10) {
         return shift;
       }
 
