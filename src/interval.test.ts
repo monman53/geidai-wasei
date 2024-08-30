@@ -301,3 +301,45 @@ test("5-diminished", () => {
     expect(interval.shift).toBe(-1);
   });
 });
+
+const validator = (
+  n1: Note,
+  n2: Note,
+  degree: number,
+  isPerfect: boolean,
+  isMinor: boolean,
+  isMajor: boolean,
+  isDiminished: boolean,
+  isAugmented: boolean,
+  shift: number,
+) => {
+  const interval = new Interval(n1, n2);
+  expect(interval.degree).toBe(degree);
+  expect(interval.isPerfect).toBe(isPerfect);
+  expect(interval.isMinor).toBe(isMinor);
+  expect(interval.isMajor).toBe(isMajor);
+  expect(interval.isDiminished).toBe(isDiminished);
+  expect(interval.isAugmented).toBe(isAugmented);
+  expect(interval.shift).toBe(shift);
+};
+
+test.each([
+  // Minor
+  [e4, c5, 5, false, true, false, false, false, 0],
+  [a4, f5, 5, false, true, false, false, false, 0],
+  [b4, g5, 5, false, true, false, false, false, 0],
+  // Major
+  [c4, a4, 5, false, false, true, false, false, 0],
+  [d4, b4, 5, false, false, true, false, false, 0],
+  [f4, d5, 5, false, false, true, false, false, 0],
+  [g4, e5, 5, false, false, true, false, false, 0],
+  // Diminished
+  [ep4, c5, 5, false, false, false, true, false, -1],
+  [ap4, f5, 5, false, false, false, true, false, -1],
+  [bp4, g5, 5, false, false, false, true, false, -1],
+  // Augmented
+  [cm4, a4, 5, false, false, false, false, true, 1],
+  [dm4, b4, 5, false, false, false, false, true, 1],
+  [fm4, d5, 5, false, false, false, false, true, 1],
+  [gm4, e5, 5, false, false, false, false, true, 1],
+])("6-%#", validator);
