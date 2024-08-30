@@ -267,3 +267,37 @@ test("4-augmented", () => {
     expect(interval.shift).toBe(1);
   });
 });
+
+test("5-perfects", () => {
+  const intervals = [
+    new Interval(c4, g4),
+    new Interval(d4, a4),
+    new Interval(e4, b4),
+    new Interval(f4, c5),
+    new Interval(g4, d5),
+    new Interval(a4, e5),
+  ];
+
+  intervals.forEach((interval) => {
+    expect(interval.degree).toBe(4);
+    expect(interval.isPerfect).toBe(true);
+    expect(interval.isAugmented).toBe(false);
+    expect(interval.isDiminished).toBe(false);
+    expect(interval.isMajor).toBe(false);
+    expect(interval.isMinor).toBe(false);
+  });
+});
+
+test("5-diminished", () => {
+  const intervals = [new Interval(b4, f5)];
+
+  intervals.forEach((interval) => {
+    expect(interval.degree).toBe(4);
+    expect(interval.isPerfect).toBe(false);
+    expect(interval.isAugmented).toBe(false);
+    expect(interval.isDiminished).toBe(true);
+    expect(interval.isMajor).toBe(false);
+    expect(interval.isMinor).toBe(false);
+    expect(interval.shift).toBe(-1);
+  });
+});
