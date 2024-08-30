@@ -109,7 +109,6 @@ test("2-augmented", () => {
     new Interval(g4, ap4),
     new Interval(a4, bp4),
   ];
-  // console.log(c4.position, dp4.position);
 
   intervals.forEach((interval) => {
     expect(interval.degree).toBe(1);
@@ -120,25 +119,151 @@ test("2-augmented", () => {
     expect(interval.isMinor).toBe(false);
     expect(interval.shift).toBe(1);
   });
+});
 
-  // // diminished
-  // {
-  //   const intervals = [
-  //     new Interval(c4, dp4),
-  //     new Interval(d4, ep4),
-  //     new Interval(f4, gp4),
-  //     new Interval(g4, ap4),
-  //     new Interval(a4, bp4),
-  //   ];
+test("2-diminished", () => {
+  // diminished
+  const intervals = [
+    new Interval(cp4, dm4),
+    new Interval(dp4, em4),
+    new Interval(fp4, gm4),
+    new Interval(gp4, am4),
+    new Interval(ap4, bm4),
+  ];
 
-  //   intervals.forEach((interval) => {
-  //     expect(interval.degree).toBe(1);
-  //     expect(interval.isPerfect).toBe(false);
-  //     expect(interval.isAugmented).toBe(true);
-  //     expect(interval.isDiminished).toBe(false);
-  //     expect(interval.isMajor).toBe(false);
-  //     expect(interval.isMinor).toBe(false);
-  //     expect(interval.shift).toBe(1);
-  //   });
-  // }
+  intervals.forEach((interval) => {
+    expect(interval.degree).toBe(1);
+    expect(interval.isPerfect).toBe(false);
+    expect(interval.isAugmented).toBe(false);
+    expect(interval.isDiminished).toBe(true);
+    expect(interval.isMajor).toBe(false);
+    expect(interval.isMinor).toBe(false);
+    expect(interval.shift).toBe(-1);
+  });
+});
+
+test("3-major", () => {
+  const intervals = [
+    new Interval(c4, e4),
+    new Interval(d4, fp4),
+    new Interval(e4, gp4),
+    new Interval(f4, a4),
+    new Interval(g4, b4),
+  ];
+
+  intervals.forEach((interval) => {
+    expect(interval.degree).toBe(2);
+    expect(interval.isPerfect).toBe(false);
+    expect(interval.isAugmented).toBe(false);
+    expect(interval.isDiminished).toBe(false);
+    expect(interval.isMajor).toBe(true);
+    expect(interval.isMinor).toBe(false);
+    expect(interval.shift).toBe(0);
+  });
+});
+
+test("3-minor", () => {
+  const intervals = [
+    new Interval(c4, em4),
+    new Interval(d4, f4),
+    new Interval(e4, g4),
+
+    // swap
+    new Interval(em4, c4),
+    new Interval(f4, d4),
+    new Interval(g4, e4),
+  ];
+
+  intervals.forEach((interval) => {
+    expect(interval.degree).toBe(2);
+    expect(interval.isPerfect).toBe(false);
+    expect(interval.isAugmented).toBe(false);
+    expect(interval.isDiminished).toBe(false);
+    expect(interval.isMajor).toBe(false);
+    expect(interval.isMinor).toBe(true);
+    expect(interval.shift).toBe(0);
+  });
+});
+
+test("3-augmented", () => {
+  const intervals = [
+    new Interval(c4, ep4),
+    new Interval(dm4, fp4),
+    new Interval(em4, gp4),
+    new Interval(fm4, a4),
+    new Interval(g4, bp4),
+
+    // Swap
+    new Interval(ep4, c4),
+    new Interval(fp4, dm4),
+    new Interval(gp4, em4),
+    new Interval(a4, fm4),
+    new Interval(bp4, g4),
+  ];
+
+  intervals.forEach((interval) => {
+    expect(interval.degree).toBe(2);
+    expect(interval.isPerfect).toBe(false);
+    expect(interval.isAugmented).toBe(true);
+    expect(interval.isDiminished).toBe(false);
+    expect(interval.isMajor).toBe(false);
+    expect(interval.isMinor).toBe(false);
+    expect(interval.shift).toBe(1);
+  });
+});
+
+test("3-diminished", () => {
+  const intervals = [
+    new Interval(cp4, em4),
+    new Interval(dp4, f4),
+    new Interval(e4, gm4),
+
+    // swap
+    new Interval(em4, cp4),
+    new Interval(f4, dp4),
+    new Interval(gm4, e4),
+  ];
+
+  intervals.forEach((interval) => {
+    expect(interval.degree).toBe(2);
+    expect(interval.isPerfect).toBe(false);
+    expect(interval.isAugmented).toBe(false);
+    expect(interval.isDiminished).toBe(true);
+    expect(interval.isMajor).toBe(false);
+    expect(interval.isMinor).toBe(false);
+    expect(interval.shift).toBe(-1);
+  });
+});
+
+test("4-perfects", () => {
+  const intervals = [
+    new Interval(c4, f4),
+    new Interval(d4, g4),
+    new Interval(e4, a4),
+    new Interval(ep4, ap4),
+    new Interval(em4, am4),
+  ];
+
+  intervals.forEach((interval) => {
+    expect(interval.degree).toBe(3);
+    expect(interval.isPerfect).toBe(true);
+    expect(interval.isAugmented).toBe(false);
+    expect(interval.isDiminished).toBe(false);
+    expect(interval.isMajor).toBe(false);
+    expect(interval.isMinor).toBe(false);
+  });
+});
+
+test("4-augmented", () => {
+  const intervals = [new Interval(f4, b4)];
+
+  intervals.forEach((interval) => {
+    expect(interval.degree).toBe(3);
+    expect(interval.isPerfect).toBe(false);
+    expect(interval.isAugmented).toBe(true);
+    expect(interval.isDiminished).toBe(false);
+    expect(interval.isMajor).toBe(false);
+    expect(interval.isMinor).toBe(false);
+    expect(interval.shift).toBe(1);
+  });
 });

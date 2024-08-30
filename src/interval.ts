@@ -40,26 +40,36 @@ export class Interval {
 
     const shift = (() => {
       const shift = this.pitchWidth - this.naturalPitchDiff;
-      if (perfectType) {
-        // Perfect intervals
+      // Perfect intervals
+      if (this.internalDegree === 0) {
         return shift;
-      } else {
-        // Minor intervals
-        if (this.internalDegree === 1 && this.naturalPitchDiff === 1) {
-          return shift;
-        }
-        if (this.internalDegree === 2 && this.naturalPitchDiff === 3) {
-          return shift;
-        }
-        if (this.internalDegree === 5 && this.naturalPitchDiff === 8) {
-          return shift;
-        }
-        if (this.internalDegree === 6 && this.naturalPitchDiff === 10) {
-          return shift;
-        }
-        // Major intervals
-        return shift + 1;
       }
+      if (this.internalDegree === 3 && this.naturalPitchDiff === 5) {
+        return shift;
+      }
+      if (this.internalDegree === 4 && this.naturalPitchDiff === 7) {
+        return shift;
+      }
+      if (this.internalDegree === 4 && this.naturalPitchDiff === 6) {
+        return shift - 1;
+      }
+
+      // Minor intervals
+      if (this.internalDegree === 1 && this.naturalPitchDiff === 1) {
+        return shift;
+      }
+      if (this.internalDegree === 2 && this.naturalPitchDiff === 3) {
+        return shift;
+      }
+      if (this.internalDegree === 5 && this.naturalPitchDiff === 8) {
+        return shift;
+      }
+      if (this.internalDegree === 6 && this.naturalPitchDiff === 10) {
+        return shift;
+      }
+
+      // Major intervals
+      return shift + 1;
     })();
 
     if (perfectType) {
