@@ -30,278 +30,6 @@ const gp4 = new Note(0, 4, 1);
 const ap4 = new Note(0, 5, 1);
 const bp4 = new Note(0, 6, 1);
 
-test("1-perfects", () => {
-  const intervals = [
-    new Interval(c4, c4),
-    new Interval(d4, d4),
-    new Interval(f4, f4),
-    new Interval(fp4, fp4),
-  ];
-
-  intervals.forEach((interval) => {
-    expect(interval.degree).toBe(0);
-    expect(interval.isPerfect).toBe(true);
-    expect(interval.isAugmented).toBe(false);
-    expect(interval.isDiminished).toBe(false);
-    expect(interval.isMajor).toBe(false);
-    expect(interval.isMinor).toBe(false);
-  });
-});
-
-test("1-augmented", () => {
-  const intervals = [
-    new Interval(c4, cp4),
-    new Interval(d4, dp4),
-    new Interval(f4, fp4),
-    new Interval(c4, cm4),
-    new Interval(d4, dm4),
-    new Interval(f4, fm4),
-  ];
-
-  intervals.forEach((interval) => {
-    expect(interval.degree).toBe(0);
-    expect(interval.isPerfect).toBe(false);
-    expect(interval.isAugmented).toBe(true);
-    expect(interval.isDiminished).toBe(false);
-    expect(interval.isMajor).toBe(false);
-    expect(interval.isMinor).toBe(false);
-    expect(interval.shift).toBe(1);
-  });
-});
-
-test("2-majors", () => {
-  const intervals = [
-    new Interval(c4, d4),
-    new Interval(d4, e4),
-    new Interval(f4, g4),
-    new Interval(g4, a4),
-    new Interval(a4, b4),
-  ];
-
-  intervals.forEach((interval) => {
-    expect(interval.degree).toBe(1);
-    expect(interval.isPerfect).toBe(false);
-    expect(interval.isAugmented).toBe(false);
-    expect(interval.isDiminished).toBe(false);
-    expect(interval.isMajor).toBe(true);
-    expect(interval.isMinor).toBe(false);
-  });
-});
-
-test("2-minors", () => {
-  const intervals = [new Interval(e4, f4), new Interval(b4, c5)];
-
-  intervals.forEach((interval) => {
-    expect(interval.degree).toBe(1);
-    expect(interval.isPerfect).toBe(false);
-    expect(interval.isAugmented).toBe(false);
-    expect(interval.isDiminished).toBe(false);
-    expect(interval.isMajor).toBe(false);
-    expect(interval.isMinor).toBe(true);
-  });
-});
-
-test("2-augmented", () => {
-  const intervals = [
-    new Interval(c4, dp4),
-    new Interval(d4, ep4),
-    new Interval(f4, gp4),
-    new Interval(g4, ap4),
-    new Interval(a4, bp4),
-  ];
-
-  intervals.forEach((interval) => {
-    expect(interval.degree).toBe(1);
-    expect(interval.isPerfect).toBe(false);
-    expect(interval.isAugmented).toBe(true);
-    expect(interval.isDiminished).toBe(false);
-    expect(interval.isMajor).toBe(false);
-    expect(interval.isMinor).toBe(false);
-    expect(interval.shift).toBe(1);
-  });
-});
-
-test("2-diminished", () => {
-  // diminished
-  const intervals = [
-    new Interval(cp4, dm4),
-    new Interval(dp4, em4),
-    new Interval(fp4, gm4),
-    new Interval(gp4, am4),
-    new Interval(ap4, bm4),
-  ];
-
-  intervals.forEach((interval) => {
-    expect(interval.degree).toBe(1);
-    expect(interval.isPerfect).toBe(false);
-    expect(interval.isAugmented).toBe(false);
-    expect(interval.isDiminished).toBe(true);
-    expect(interval.isMajor).toBe(false);
-    expect(interval.isMinor).toBe(false);
-    expect(interval.shift).toBe(-1);
-  });
-});
-
-test("3-major", () => {
-  const intervals = [
-    new Interval(c4, e4),
-    new Interval(d4, fp4),
-    new Interval(e4, gp4),
-    new Interval(f4, a4),
-    new Interval(g4, b4),
-  ];
-
-  intervals.forEach((interval) => {
-    expect(interval.degree).toBe(2);
-    expect(interval.isPerfect).toBe(false);
-    expect(interval.isAugmented).toBe(false);
-    expect(interval.isDiminished).toBe(false);
-    expect(interval.isMajor).toBe(true);
-    expect(interval.isMinor).toBe(false);
-    expect(interval.shift).toBe(0);
-  });
-});
-
-test("3-minor", () => {
-  const intervals = [
-    new Interval(c4, em4),
-    new Interval(d4, f4),
-    new Interval(e4, g4),
-
-    // swap
-    new Interval(em4, c4),
-    new Interval(f4, d4),
-    new Interval(g4, e4),
-  ];
-
-  intervals.forEach((interval) => {
-    expect(interval.degree).toBe(2);
-    expect(interval.isPerfect).toBe(false);
-    expect(interval.isAugmented).toBe(false);
-    expect(interval.isDiminished).toBe(false);
-    expect(interval.isMajor).toBe(false);
-    expect(interval.isMinor).toBe(true);
-    expect(interval.shift).toBe(0);
-  });
-});
-
-test("3-augmented", () => {
-  const intervals = [
-    new Interval(c4, ep4),
-    new Interval(dm4, fp4),
-    new Interval(em4, gp4),
-    new Interval(fm4, a4),
-    new Interval(g4, bp4),
-
-    // Swap
-    new Interval(ep4, c4),
-    new Interval(fp4, dm4),
-    new Interval(gp4, em4),
-    new Interval(a4, fm4),
-    new Interval(bp4, g4),
-  ];
-
-  intervals.forEach((interval) => {
-    expect(interval.degree).toBe(2);
-    expect(interval.isPerfect).toBe(false);
-    expect(interval.isAugmented).toBe(true);
-    expect(interval.isDiminished).toBe(false);
-    expect(interval.isMajor).toBe(false);
-    expect(interval.isMinor).toBe(false);
-    expect(interval.shift).toBe(1);
-  });
-});
-
-test("3-diminished", () => {
-  const intervals = [
-    new Interval(cp4, em4),
-    new Interval(dp4, f4),
-    new Interval(e4, gm4),
-
-    // swap
-    new Interval(em4, cp4),
-    new Interval(f4, dp4),
-    new Interval(gm4, e4),
-  ];
-
-  intervals.forEach((interval) => {
-    expect(interval.degree).toBe(2);
-    expect(interval.isPerfect).toBe(false);
-    expect(interval.isAugmented).toBe(false);
-    expect(interval.isDiminished).toBe(true);
-    expect(interval.isMajor).toBe(false);
-    expect(interval.isMinor).toBe(false);
-    expect(interval.shift).toBe(-1);
-  });
-});
-
-test("4-perfects", () => {
-  const intervals = [
-    new Interval(c4, f4),
-    new Interval(d4, g4),
-    new Interval(e4, a4),
-    new Interval(ep4, ap4),
-    new Interval(em4, am4),
-  ];
-
-  intervals.forEach((interval) => {
-    expect(interval.degree).toBe(3);
-    expect(interval.isPerfect).toBe(true);
-    expect(interval.isAugmented).toBe(false);
-    expect(interval.isDiminished).toBe(false);
-    expect(interval.isMajor).toBe(false);
-    expect(interval.isMinor).toBe(false);
-  });
-});
-
-test("4-augmented", () => {
-  const intervals = [new Interval(f4, b4)];
-
-  intervals.forEach((interval) => {
-    expect(interval.degree).toBe(3);
-    expect(interval.isPerfect).toBe(false);
-    expect(interval.isAugmented).toBe(true);
-    expect(interval.isDiminished).toBe(false);
-    expect(interval.isMajor).toBe(false);
-    expect(interval.isMinor).toBe(false);
-    expect(interval.shift).toBe(1);
-  });
-});
-
-test("5-perfects", () => {
-  const intervals = [
-    new Interval(c4, g4),
-    new Interval(d4, a4),
-    new Interval(e4, b4),
-    new Interval(f4, c5),
-    new Interval(g4, d5),
-    new Interval(a4, e5),
-  ];
-
-  intervals.forEach((interval) => {
-    expect(interval.degree).toBe(4);
-    expect(interval.isPerfect).toBe(true);
-    expect(interval.isAugmented).toBe(false);
-    expect(interval.isDiminished).toBe(false);
-    expect(interval.isMajor).toBe(false);
-    expect(interval.isMinor).toBe(false);
-  });
-});
-
-test("5-diminished", () => {
-  const intervals = [new Interval(b4, f5)];
-
-  intervals.forEach((interval) => {
-    expect(interval.degree).toBe(4);
-    expect(interval.isPerfect).toBe(false);
-    expect(interval.isAugmented).toBe(false);
-    expect(interval.isDiminished).toBe(true);
-    expect(interval.isMajor).toBe(false);
-    expect(interval.isMinor).toBe(false);
-    expect(interval.shift).toBe(-1);
-  });
-});
-
 const validator = (
   n1: Note,
   n2: Note,
@@ -313,16 +41,145 @@ const validator = (
   isAugmented: boolean,
   shift: number,
 ) => {
-  const interval = new Interval(n1, n2);
-  expect(interval.degree).toBe(degree);
-  expect(interval.isPerfect).toBe(isPerfect);
-  expect(interval.isMinor).toBe(isMinor);
-  expect(interval.isMajor).toBe(isMajor);
-  expect(interval.isDiminished).toBe(isDiminished);
-  expect(interval.isAugmented).toBe(isAugmented);
-  expect(interval.shift).toBe(shift);
+  const intervals = [
+    new Interval(n1, n2), // normal
+    new Interval(n2, n1), // inverted
+  ];
+  intervals.forEach((interval) => {
+    expect(interval.degree).toBe(degree);
+    expect(interval.isPerfect).toBe(isPerfect);
+    expect(interval.isMinor).toBe(isMinor);
+    expect(interval.isMajor).toBe(isMajor);
+    expect(interval.isDiminished).toBe(isDiminished);
+    expect(interval.isAugmented).toBe(isAugmented);
+    expect(interval.shift).toBe(shift);
+  });
 };
 
+// 1
+test.each([
+  // Perfect
+  [c4, c4, 0, true, false, false, false, false, 0],
+  [d4, d4, 0, true, false, false, false, false, 0],
+  [e4, e4, 0, true, false, false, false, false, 0],
+  [f4, f4, 0, true, false, false, false, false, 0],
+  [g4, g4, 0, true, false, false, false, false, 0],
+  [a4, a4, 0, true, false, false, false, false, 0],
+  [b4, b4, 0, true, false, false, false, false, 0],
+  // Augmented
+  [cp4, c4, 0, false, false, false, false, true, 1],
+  [dp4, d4, 0, false, false, false, false, true, 1],
+  [ep4, e4, 0, false, false, false, false, true, 1],
+  [fp4, f4, 0, false, false, false, false, true, 1],
+  [gp4, g4, 0, false, false, false, false, true, 1],
+  [ap4, a4, 0, false, false, false, false, true, 1],
+  [bp4, b4, 0, false, false, false, false, true, 1],
+  [cm4, c4, 0, false, false, false, false, true, 1],
+  [dm4, d4, 0, false, false, false, false, true, 1],
+  [em4, e4, 0, false, false, false, false, true, 1],
+  [fm4, f4, 0, false, false, false, false, true, 1],
+  [gm4, g4, 0, false, false, false, false, true, 1],
+  [am4, a4, 0, false, false, false, false, true, 1],
+  [bm4, b4, 0, false, false, false, false, true, 1],
+])("1-%#", validator);
+
+// 2
+test.each([
+  // Minor
+  [e4, f4, 1, false, true, false, false, false, 0],
+  [b4, c5, 1, false, true, false, false, false, 0],
+  // Major
+  [c4, d4, 1, false, false, true, false, false, 0],
+  [d4, e4, 1, false, false, true, false, false, 0],
+  [f4, g4, 1, false, false, true, false, false, 0],
+  [g4, a4, 1, false, false, true, false, false, 0],
+  [a4, b4, 1, false, false, true, false, false, 0],
+  // Diminished
+  [ep4, f4, 1, false, false, false, true, false, -1],
+  [bp4, c5, 1, false, false, false, true, false, -1],
+  // Augmented
+  [cm4, d4, 1, false, false, false, false, true, 1],
+  [dm4, e4, 1, false, false, false, false, true, 1],
+  [fm4, g4, 1, false, false, false, false, true, 1],
+  [gm4, a4, 1, false, false, false, false, true, 1],
+  [am4, b4, 1, false, false, false, false, true, 1],
+])("2-%#", validator);
+
+// 3
+test.each([
+  // Minor
+  [d4, f4, 2, false, true, false, false, false, 0],
+  [e4, g4, 2, false, true, false, false, false, 0],
+  [a4, c5, 2, false, true, false, false, false, 0],
+  [b4, d5, 2, false, true, false, false, false, 0],
+  // Major
+  [c4, e4, 2, false, false, true, false, false, 0],
+  [f4, a4, 2, false, false, true, false, false, 0],
+  [g4, b4, 2, false, false, true, false, false, 0],
+  // Diminished
+  [dp4, f4, 2, false, false, false, true, false, -1],
+  [ep4, g4, 2, false, false, false, true, false, -1],
+  [ap4, c5, 2, false, false, false, true, false, -1],
+  [bp4, d5, 2, false, false, false, true, false, -1],
+  // Augmented
+  [cm4, e4, 2, false, false, false, false, true, 1],
+  [fm4, a4, 2, false, false, false, false, true, 1],
+  [gm4, b4, 2, false, false, false, false, true, 1],
+])("3-%#", validator);
+
+// 4
+test.each([
+  // Perfect
+  [c4, f4, 3, true, false, false, false, false, 0],
+  [d4, g4, 3, true, false, false, false, false, 0],
+  [e4, a4, 3, true, false, false, false, false, 0],
+  [g4, c5, 3, true, false, false, false, false, 0],
+  [a4, d5, 3, true, false, false, false, false, 0],
+  [b4, e5, 3, true, false, false, false, false, 0],
+  // Diminished
+  [cp4, f4, 3, false, false, false, true, false, -1],
+  [dp4, g4, 3, false, false, false, true, false, -1],
+  [ep4, a4, 3, false, false, false, true, false, -1],
+  [gp4, c5, 3, false, false, false, true, false, -1],
+  [ap4, d5, 3, false, false, false, true, false, -1],
+  [bp4, e5, 3, false, false, false, true, false, -1],
+  // Augmented
+  [f4, b4, 3, false, false, false, false, true, 1], //
+  [cm4, f4, 3, false, false, false, false, true, 1],
+  [dm4, g4, 3, false, false, false, false, true, 1],
+  [em4, a4, 3, false, false, false, false, true, 1],
+  [gm4, c5, 3, false, false, false, false, true, 1],
+  [am4, d5, 3, false, false, false, false, true, 1],
+  [bm4, e5, 3, false, false, false, false, true, 1],
+])("4-%#", validator);
+
+// 5
+test.each([
+  // Perfect
+  [c4, g4, 4, true, false, false, false, false, 0],
+  [d4, a4, 4, true, false, false, false, false, 0],
+  [e4, b4, 4, true, false, false, false, false, 0],
+  [f4, c5, 4, true, false, false, false, false, 0],
+  [g4, d5, 4, true, false, false, false, false, 0],
+  [a4, e5, 4, true, false, false, false, false, 0],
+  // Diminished
+  [b4, f5, 4, false, false, false, true, false, -1], //
+  [cp4, g4, 4, false, false, false, true, false, -1],
+  [dp4, a4, 4, false, false, false, true, false, -1],
+  [ep4, b4, 4, false, false, false, true, false, -1],
+  [fp4, c5, 4, false, false, false, true, false, -1],
+  [gp4, d5, 4, false, false, false, true, false, -1],
+  [ap4, e5, 4, false, false, false, true, false, -1],
+  // Augmented
+  [cm4, g4, 4, false, false, false, false, true, 1],
+  [dm4, a4, 4, false, false, false, false, true, 1],
+  [em4, b4, 4, false, false, false, false, true, 1],
+  [fm4, c5, 4, false, false, false, false, true, 1],
+  [gm4, d5, 4, false, false, false, false, true, 1],
+  [am4, e5, 4, false, false, false, false, true, 1],
+])("5-%#", validator);
+
+// 6
 test.each([
   // Minor
   [e4, c5, 5, false, true, false, false, false, 0],
@@ -344,6 +201,7 @@ test.each([
   [gm4, e5, 5, false, false, false, false, true, 1],
 ])("6-%#", validator);
 
+// 7
 test.each([
   // Minor
   [d4, c5, 6, false, true, false, false, false, 0],
