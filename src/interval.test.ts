@@ -92,6 +92,7 @@ const ap5 = new Note(1, 5, 1);
 const bp5 = new Note(1, 6, 1);
 
 const emm4 = new Note(0, 2, -2);
+const bmm4 = new Note(0, 6, -2);
 
 const dpp4 = new Note(0, 1, 2);
 const gpp4 = new Note(0, 4, 2);
@@ -120,6 +121,7 @@ const i4aa: IA = [3, 0, false, false, false, false, true, 2];
 
 const i5p: IA = [4, 0, true, false, false, false, false, 0];
 const i5d: IA = [4, 0, false, false, false, true, false, -1];
+const i5dd: IA = [4, 0, false, false, false, true, false, -2];
 const i5a: IA = [4, 0, false, false, false, false, true, 1];
 
 const i6m: IA = [5, 0, false, true, false, false, false, 0];
@@ -454,4 +456,36 @@ test.each([
   [g3, f4, ...i7m],
   [b3, g4, ...i6m],
   [f4, a3, ...i6m],
+
+  // "Problem-4, p.86"
+  [g4, bm4, ...i3m],
+  [gp4, e5, ...i6m],
+  [bm4, f5, ...i5p],
+  [fp4, f4, ...i1a],
+  [g4, am4, ...i2m],
+  [bm4, am4, ...i2p],
+  [b4, bp3, ...i8d],
+
+  [c3, am3, ...i6m],
+  [d3, ap3, ...i5a],
+  [g2, fp3, ...i7p],
+  [cm3, c4, ...i8a],
+  [b2, am3, ...i7d],
+  [dp3, b3, ...i6m],
+  [bm3, c4, ...i2p],
+
+  [dp4, bp3, ...i3m],
+  [g4, cm4, ...i5a],
+  [bp3, a4, ...i7d],
+  [fp3, em4, ...i7d],
+  [em3, cp4, ...i6a],
+  [gp3, dm4, ...i5dd],
+  [ap3, ep4, ...i5p],
+
+  [f4, dm5, ...i6m],
+  [c5, am4, ...i3p],
+  [fm4, bm4, ...i4a],
+  [bmm4, am4, ...i2m],
+  [am4, e5, ...i5a],
+  [gm4, em5, ...i6p],
 ])("Gakuten-%#", validator);
