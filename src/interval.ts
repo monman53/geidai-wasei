@@ -1,17 +1,45 @@
+import assert from "assert";
 import { Note } from "./note";
 
 export class Interval {
-  public readonly degree: number;
-  public readonly octave: number;
-  public readonly isPerfect: boolean;
-  public readonly isMajor: boolean;
-  public readonly isMinor: boolean;
-  public readonly isAugmented: boolean;
-  public readonly isDiminished: boolean;
-  public readonly shift: number; // For augmented/diminished intervals
-  private naturalPitchDiff: number;
-  private pitchWidth: number;
-  constructor(a: Note, b: Note) {
+  constructor(
+    public readonly degree: number,
+    public readonly octave: number,
+    public readonly isPerfect: boolean,
+    public readonly isMinor: boolean,
+    public readonly isMajor: boolean,
+    public readonly isDiminished: boolean,
+    public readonly isAugmented: boolean,
+    public readonly shift: number, // For augmented/diminished intervals
+  ) {
+    assert(Number.isInteger(degree));
+    assert(Number.isInteger(octave));
+    assert(Number.isInteger(shift));
+    assert(degree >= 0);
+    assert(octave >= 0);
+
+    if (isPerfect) {
+      assert(!isMajor);
+      assert(!isMinor);
+      assert(!isAugmented);
+      assert(!isDiminished);
+      assert(shift === 0);
+    }
+    if (isMajor || isMinor) {
+      assert(!isPerfect);
+      assert(!isAugmented);
+      assert(!isDiminished);
+      assert(shift === 0);
+    }
+    if (isAugmented || isDiminished) {
+      assert(!isPerfect);
+      assert(!isMinor);
+      assert(!isMajor);
+      assert(shift !== 0);
+    }
+  }
+
+  static between = (a: Note, b: Note) => {
     // Make b > a
     if (a.getGlobalPosition() > b.getGlobalPosition()) {
       // Swap
@@ -20,80 +48,74 @@ export class Interval {
       b = tmp;
     }
 
-    this.degree = (b.getGlobalPosition() - a.getGlobalPosition()) % 7;
-    this.octave = Math.floor(
+    const degree = (b.getGlobalPosition() - a.getGlobalPosition()) % 7;
+    const octave = Math.floor(
       (b.getGlobalPosition() - a.getGlobalPosition()) / 7,
     );
 
-    this.naturalPitchDiff = b.getPitch(false) - a.getPitch(false);
-    this.pitchWidth = Math.abs(b.getPitch() - a.getPitch());
+    const naturalPitchDiff = b.getPitch(false) - a.getPitch(false);
+    const pitchWidth = Math.abs(b.getPitch() - a.getPitch());
 
-    this.isPerfect = false;
-    this.isMajor = false;
-    this.isMinor = false;
-    this.isAugmented = false;
-    this.isDiminished = false;
-    this.shift = 0;
+    let isPerfect = false;
+    let isMajor = false;
+    let isMinor = false;
+    let isAugmented = false;
+    let isDiminished = false;
+    let shift = pitchWidth - naturalPitchDiff;
 
-    const perfectType =
-      this.degree === 0 || this.degree === 3 || this.degree === 4;
+    // Perfect intervals
+    if (degree === 3 && naturalPitchDiff % 12 === 6) {
+      shift = shift + 1;
+    }
+    if (degree === 4 && naturalPitchDiff % 12 === 6) {
+      shift = shift - 1;
+    }
+    // Major intervals
+    if (degree === 1 && naturalPitchDiff % 12 === 2) {
+      shift = shift + 1;
+    }
+    if (degree === 2 && naturalPitchDiff % 12 === 4) {
+      shift = shift + 1;
+    }
+    if (degree === 5 && naturalPitchDiff % 12 === 9) {
+      shift = shift + 1;
+    }
+    if (degree === 6 && naturalPitchDiff % 12 === 11) {
+      shift = shift + 1;
+    }
 
-    const shift = (() => {
-      const shift = this.pitchWidth - this.naturalPitchDiff;
-      // Perfect intervals
-      if (this.degree === 0) {
-        return shift;
-      }
-      if (this.degree === 3 && this.naturalPitchDiff % 12 === 5) {
-        return shift;
-      }
-      if (this.degree === 4 && this.naturalPitchDiff % 12 === 7) {
-        return shift;
-      }
-      if (this.degree === 4 && this.naturalPitchDiff % 12 === 6) {
-        return shift - 1;
-      }
-
-      // Minor intervals
-      if (this.degree === 1 && this.naturalPitchDiff % 12 === 1) {
-        return shift;
-      }
-      if (this.degree === 2 && this.naturalPitchDiff % 12 === 3) {
-        return shift;
-      }
-      if (this.degree === 5 && this.naturalPitchDiff % 12 === 8) {
-        return shift;
-      }
-      if (this.degree === 6 && this.naturalPitchDiff % 12 === 10) {
-        return shift;
-      }
-
-      // Major intervals
-      return shift + 1;
-    })();
-
+    const perfectType = degree === 0 || degree === 3 || degree === 4;
     if (perfectType) {
       if (shift === 0) {
-        this.isPerfect = true;
+        isPerfect = true;
       } else if (shift > 0) {
-        this.isAugmented = true;
-        this.shift = shift;
+        isAugmented = true;
       } else if (shift < 0) {
-        this.isDiminished = true;
-        this.shift = shift;
+        isDiminished = true;
       }
     } else {
       if (shift === 0) {
-        this.isMinor = true;
+        isMinor = true;
       } else if (shift === 1) {
-        this.isMajor = true;
+        isMajor = true;
+        shift = 0;
       } else if (shift < 0) {
-        this.isDiminished = true;
-        this.shift = shift;
+        isDiminished = true;
       } else if (shift > 1) {
-        this.isAugmented = true;
-        this.shift = shift - 1;
+        isAugmented = true;
+        shift = shift - 1;
       }
     }
-  }
+
+    return new Interval(
+      degree,
+      octave,
+      isPerfect,
+      isMinor,
+      isMajor,
+      isDiminished,
+      isAugmented,
+      shift,
+    );
+  };
 }

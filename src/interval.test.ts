@@ -150,6 +150,10 @@ const i8p: IA = [0, 1, true, false, false, false, false, 0];
 const i8d: IA = [0, 1, false, false, false, true, false, -1];
 const i8a: IA = [0, 1, false, false, false, false, true, 1];
 
+//================================
+// Test
+//================================
+
 const validator = (
   n1: Note,
   n2: Note,
@@ -163,8 +167,8 @@ const validator = (
   shift: number,
 ) => {
   const intervals = [
-    new Interval(n1, n2), // normal
-    new Interval(n2, n1), // inverted
+    Interval.between(n1, n2), // normal
+    Interval.between(n2, n1), // inverted
   ];
   intervals.forEach((interval) => {
     expect(interval.degree).toBe(degree);
