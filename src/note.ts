@@ -51,6 +51,21 @@ export class Note {
     return new Note(nextOctave, nextPosition, pitchDiff);
   };
 
+  lower = (interval: Interval) => {
+    const currentGlobalPosition = this.getGlobalPosition();
+
+    const nextGlobalPosition =
+      currentGlobalPosition - 7 * interval.octave - interval.degree;
+    const nextOctave = Math.floor(nextGlobalPosition / 7);
+    const nextPosition = nextGlobalPosition % 7;
+    const nextNaturalNote = new Note(nextOctave, nextPosition, 0);
+
+    const nextPitch = this.getPitch() - interval.toPitch();
+    const pitchDiff = nextPitch - nextNaturalNote.getPitch();
+
+    return new Note(nextOctave, nextPosition, pitchDiff);
+  };
+
   equalTo = (note: Note) => {
     return (
       this.octave === note.octave &&

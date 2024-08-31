@@ -224,6 +224,10 @@ const validator = (n1: Note, n2: Note, expected: Interval) => {
     expect(interval.shift).toBe(expected.shift);
   });
 
+  //--------------------------------
+  // Note raising/lowering test
+  //--------------------------------
+
   // Swap
   if (n1.getPitch() > n2.getPitch()) {
     const tmp = n2;
@@ -232,6 +236,7 @@ const validator = (n1: Note, n2: Note, expected: Interval) => {
   }
 
   expect(n1.raise(expected).equalTo(n2)).toBe(true);
+  expect(n2.lower(expected).equalTo(n1)).toBe(true);
 };
 
 // 1
