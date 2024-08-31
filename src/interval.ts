@@ -21,7 +21,9 @@ export class Interval {
     }
 
     this.degree = (b.getGlobalPosition() - a.getGlobalPosition()) % 7;
-    this.octave = (b.getGlobalPosition() - a.getGlobalPosition()) / 7;
+    this.octave = Math.floor(
+      (b.getGlobalPosition() - a.getGlobalPosition()) / 7,
+    );
 
     this.naturalPitchDiff = b.getPitch(false) - a.getPitch(false);
     this.pitchWidth = Math.abs(b.getPitch() - a.getPitch());
