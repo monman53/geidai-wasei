@@ -95,6 +95,7 @@ const emm4 = new Note(0, 2, -2);
 const bmm4 = new Note(0, 6, -2);
 
 const dpp4 = new Note(0, 1, 2);
+const fpp4 = new Note(0, 3, 2);
 const gpp4 = new Note(0, 4, 2);
 
 //================================
@@ -488,4 +489,25 @@ test.each([
   [bmm4, am4, ...i2m],
   [am4, e5, ...i5a],
   [gm4, em5, ...i6p],
+
+  // "Problem-5, p.87"
+  [fp4, b4, ...i4p],
+  [b4, a4, ...i2p],
+  [a4, e5, ...i5p],
+  [e5, fpp4, ...i7d],
+  [fpp4, a4, ...i3d],
+  [a4, am4, ...i1a],
+  [am4, fp5, ...i6a],
+  [fp5, dp5, ...i3m],
+  [dp5, d5, ...i1a],
+  [d5, gp4, ...i5d],
+  [gp4, fpp4, ...i2m],
+
+  [fpp4, cp4, ...i4a],
+  [cp4, fp3, ...i5p],
+  [fp3, dp4, ...i6p],
+  [dp4, am4, ...i5dd],
+  [am4, bm3, ...i7m],
+  [bm3, d3, ...i6m],
+  [d3, em3, ...i2m],
 ])("Gakuten-%#", validator);
