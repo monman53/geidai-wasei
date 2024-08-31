@@ -32,7 +32,9 @@ const f5 = new Note(1, 3, 0);
 const g5 = new Note(1, 4, 0);
 const a5 = new Note(1, 5, 0);
 const b5 = new Note(1, 6, 0);
+const e6 = new Note(2, 2, 0);
 
+const bm1 = new Note(-3, 6, -1);
 const cm2 = new Note(-2, 0, -1);
 const dm2 = new Note(-2, 1, -1);
 const em2 = new Note(-2, 2, -1);
@@ -104,26 +106,34 @@ const gpp4 = new Note(0, 4, 2);
 type IA = [number, number, boolean, boolean, boolean, boolean, boolean, number];
 const i1p: IA = [0, 0, true, false, false, false, false, 0];
 const i1a: IA = [0, 0, false, false, false, false, true, 1];
+const i1p2: IA = [0, 2, true, false, false, false, false, 0];
 
 const i2m: IA = [1, 0, false, true, false, false, false, 0];
 const i2p: IA = [1, 0, false, false, true, false, false, 0];
 const i2d: IA = [1, 0, false, false, false, true, false, -1];
 const i2a: IA = [1, 0, false, false, false, false, true, 1];
+const i2p1: IA = [1, 1, false, false, true, false, false, 0];
+const i2a1: IA = [1, 1, false, false, false, false, true, 1];
 
 const i3m: IA = [2, 0, false, true, false, false, false, 0];
 const i3p: IA = [2, 0, false, false, true, false, false, 0];
 const i3d: IA = [2, 0, false, false, false, true, false, -1];
 const i3a: IA = [2, 0, false, false, false, false, true, 1];
+const i3m1: IA = [2, 1, false, true, false, false, false, 0];
+const i3p1: IA = [2, 1, false, false, true, false, false, 0];
+const i3a1: IA = [2, 1, false, false, false, false, true, 1];
 
 const i4p: IA = [3, 0, true, false, false, false, false, 0];
 const i4d: IA = [3, 0, false, false, false, true, false, -1];
 const i4a: IA = [3, 0, false, false, false, false, true, 1];
 const i4aa: IA = [3, 0, false, false, false, false, true, 2];
+const i4a1: IA = [3, 1, false, false, false, false, true, 1];
 
 const i5p: IA = [4, 0, true, false, false, false, false, 0];
 const i5d: IA = [4, 0, false, false, false, true, false, -1];
 const i5dd: IA = [4, 0, false, false, false, true, false, -2];
 const i5a: IA = [4, 0, false, false, false, false, true, 1];
+const i5d1: IA = [4, 1, false, false, false, true, false, -1];
 
 const i6m: IA = [5, 0, false, true, false, false, false, 0];
 const i6p: IA = [5, 0, false, false, true, false, false, 0];
@@ -134,6 +144,7 @@ const i7m: IA = [6, 0, false, true, false, false, false, 0];
 const i7p: IA = [6, 0, false, false, true, false, false, 0];
 const i7d: IA = [6, 0, false, false, false, true, false, -1];
 const i7a: IA = [6, 0, false, false, false, false, true, 1];
+const i7m1: IA = [6, 1, false, true, false, false, false, 0];
 
 const i8p: IA = [0, 1, true, false, false, false, false, 0];
 const i8d: IA = [0, 1, false, false, false, true, false, -1];
@@ -369,7 +380,6 @@ test.each([
 test.each([
   // "Problem-1, p.80"
   // 1
-  // [g4, d5, 4, 0, true, false, false, false, false, 0],
   [g4, d5, ...i5p],
   [gp4, d5, ...i5d],
   [gm4, d5, ...i5a],
@@ -510,4 +520,19 @@ test.each([
   [am4, bm3, ...i7m],
   [bm3, d3, ...i6m],
   [d3, em3, ...i2m],
+
+  // "Problem-6, p.88"
+  [c4, d5, ...i2p1],
+  [d5, gp3, ...i5d1],
+  [gp3, f2, ...i2a1],
+  [f2, am3, ...i3m1],
+  [am3, bm4, ...i2p1],
+  [bm4, e6, ...i4a1],
+  [e6, fp4, ...i7m1],
+  [fp4, e3, ...i2p1],
+  [e3, bm1, ...i4a1],
+  [bm1, bm3, ...i1p2],
+  [bm3, dp5, ...i3a1],
+  [dp5, b3, ...i3p1],
+  [b3, f5, ...i5d1],
 ])("Gakuten-%#", validator);

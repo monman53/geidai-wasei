@@ -44,27 +44,27 @@ export class Interval {
       if (this.degree === 0) {
         return shift;
       }
-      if (this.degree === 3 && this.naturalPitchDiff === 5) {
+      if (this.degree === 3 && this.naturalPitchDiff % 12 === 5) {
         return shift;
       }
-      if (this.degree === 4 && this.naturalPitchDiff === 7) {
+      if (this.degree === 4 && this.naturalPitchDiff % 12 === 7) {
         return shift;
       }
-      if (this.degree === 4 && this.naturalPitchDiff === 6) {
+      if (this.degree === 4 && this.naturalPitchDiff % 12 === 6) {
         return shift - 1;
       }
 
       // Minor intervals
-      if (this.degree === 1 && this.naturalPitchDiff === 1) {
+      if (this.degree === 1 && this.naturalPitchDiff % 12 === 1) {
         return shift;
       }
-      if (this.degree === 2 && this.naturalPitchDiff === 3) {
+      if (this.degree === 2 && this.naturalPitchDiff % 12 === 3) {
         return shift;
       }
-      if (this.degree === 5 && this.naturalPitchDiff === 8) {
+      if (this.degree === 5 && this.naturalPitchDiff % 12 === 8) {
         return shift;
       }
-      if (this.degree === 6 && this.naturalPitchDiff === 10) {
+      if (this.degree === 6 && this.naturalPitchDiff % 12 === 10) {
         return shift;
       }
 
