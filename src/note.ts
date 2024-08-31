@@ -1,4 +1,5 @@
 import assert from "assert";
+import { Interval } from "./interval";
 
 // export type Position = 0 | 1 | 2 | 3 | 4 | 5 | 6;
 // export type Octave = -4 | -3 | -2 | -1 | 0 | 1 | 2 | 3;
@@ -17,7 +18,7 @@ export class Note {
     assert(Number.isInteger(position));
     assert(Number.isInteger(accidental));
 
-    assert(octave >= -4 && octave < 4);
+    assert(octave >= 0 && octave < 7);
     assert(position >= 0 && position < 7);
     assert(accidental >= -2 && accidental <= 2);
   }
@@ -33,5 +34,28 @@ export class Note {
 
   getGlobalPosition = () => {
     return 7 * this.octave + this.position;
+  };
+
+  raise = (interval: Interval) => {
+    const currentGlobalPosition = this.getGlobalPosition();
+
+    const nextGlobalPosition =
+      currentGlobalPosition + 7 * interval.octave + interval.degree;
+    const nextOctave = Math.floor(nextGlobalPosition / 7);
+    const nextPosition = nextGlobalPosition % 7;
+    const nextNaturalNote = new Note(nextOctave, nextPosition, 0);
+
+    const nextPitch = this.getPitch() + interval.toPitch();
+    const pitchDiff = nextPitch - nextNaturalNote.getPitch();
+
+    return new Note(nextOctave, nextPosition, pitchDiff);
+  };
+
+  equalTo = (note: Note) => {
+    return (
+      this.octave === note.octave &&
+      this.position === note.position &&
+      this.accidental === note.accidental
+    );
   };
 }
