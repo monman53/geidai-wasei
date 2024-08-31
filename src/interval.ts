@@ -42,23 +42,8 @@ export class Interval {
   toPitch = () => {
     let res = 0;
     res += this.octave * 12;
-    if (this.degree === 1) {
-      res += 1;
-    }
-    if (this.degree === 2) {
-      res += 3;
-    }
-    if (this.degree === 3) {
-      res += 5;
-    }
-    if (this.degree === 4) {
-      res += 7;
-    }
-    if (this.degree === 5) {
-      res += 8;
-    }
-    if (this.degree === 6) {
-      res += 10;
+    if (this.degree !== 0) {
+      res += this.degree * 2 - (this.degree > 4 ? 2 : 1);
     }
 
     if (this.isMajor) {
@@ -92,7 +77,7 @@ export class Interval {
       (b.getGlobalPosition() - a.getGlobalPosition()) / 7,
     );
 
-    const naturalPitchDiff = b.getPitch(false) - a.getPitch(false);
+    const naturalPitchDiff = b.getNaturalPitch() - a.getNaturalPitch();
     const pitchWidth = Math.abs(b.getPitch() - a.getPitch());
 
     let isPerfect = false;

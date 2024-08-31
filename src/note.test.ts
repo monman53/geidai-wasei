@@ -69,26 +69,26 @@ test("pitch", () => {
   expect(new Note(0, 6, -1).getPitch()).toBe(10);
 });
 
-test("pitch-without-accidental", () => {
-  expect(new Note(-1, 0, 0).getPitch(false)).toBe(-12);
-  expect(new Note(0, 0, 0).getPitch(false)).toBe(0);
-  expect(new Note(1, 0, 0).getPitch(false)).toBe(12);
+test("natural-pitch", () => {
+  expect(new Note(-1, 0, 0).getNaturalPitch()).toBe(-12);
+  expect(new Note(0, 0, 0).getNaturalPitch()).toBe(0);
+  expect(new Note(1, 0, 0).getNaturalPitch()).toBe(12);
 
-  expect(new Note(0, 0, 1).getPitch(false)).toBe(0);
-  expect(new Note(0, 1, 1).getPitch(false)).toBe(2);
-  expect(new Note(0, 2, 1).getPitch(false)).toBe(4);
-  expect(new Note(0, 3, 1).getPitch(false)).toBe(5);
-  expect(new Note(0, 4, 1).getPitch(false)).toBe(7);
-  expect(new Note(0, 5, 1).getPitch(false)).toBe(9);
-  expect(new Note(0, 6, 1).getPitch(false)).toBe(11);
+  expect(new Note(0, 0, 1).getNaturalPitch()).toBe(0);
+  expect(new Note(0, 1, 1).getNaturalPitch()).toBe(2);
+  expect(new Note(0, 2, 1).getNaturalPitch()).toBe(4);
+  expect(new Note(0, 3, 1).getNaturalPitch()).toBe(5);
+  expect(new Note(0, 4, 1).getNaturalPitch()).toBe(7);
+  expect(new Note(0, 5, 1).getNaturalPitch()).toBe(9);
+  expect(new Note(0, 6, 1).getNaturalPitch()).toBe(11);
 
-  expect(new Note(0, 0, -1).getPitch(false)).toBe(0);
-  expect(new Note(0, 1, -1).getPitch(false)).toBe(2);
-  expect(new Note(0, 2, -1).getPitch(false)).toBe(4);
-  expect(new Note(0, 3, -1).getPitch(false)).toBe(5);
-  expect(new Note(0, 4, -1).getPitch(false)).toBe(7);
-  expect(new Note(0, 5, -1).getPitch(false)).toBe(9);
-  expect(new Note(0, 6, -1).getPitch(false)).toBe(11);
+  expect(new Note(0, 0, -1).getNaturalPitch()).toBe(0);
+  expect(new Note(0, 1, -1).getNaturalPitch()).toBe(2);
+  expect(new Note(0, 2, -1).getNaturalPitch()).toBe(4);
+  expect(new Note(0, 3, -1).getNaturalPitch()).toBe(5);
+  expect(new Note(0, 4, -1).getNaturalPitch()).toBe(7);
+  expect(new Note(0, 5, -1).getNaturalPitch()).toBe(9);
+  expect(new Note(0, 6, -1).getNaturalPitch()).toBe(11);
 });
 
 test("global-position", () => {

@@ -22,13 +22,13 @@ export class Note {
     assert(accidental >= -2 && accidental <= 2);
   }
 
-  getPitch = (withAccidental = true) => {
+  getNaturalPitch = () => {
     const pitchPosition = this.position * 2 + (this.position > 2 ? -1 : 0);
-    if (withAccidental) {
-      return this.octave * 12 + pitchPosition + this.accidental;
-    } else {
-      return this.octave * 12 + pitchPosition;
-    }
+    return this.octave * 12 + pitchPosition;
+  };
+
+  getPitch = () => {
+    return this.getNaturalPitch() + this.accidental;
   };
 
   getGlobalPosition = () => {
