@@ -39,6 +39,45 @@ export class Interval {
     }
   }
 
+  toPitch = () => {
+    let res = 0;
+    res += this.octave * 12;
+    if (this.degree === 1) {
+      res += 1;
+    }
+    if (this.degree === 2) {
+      res += 3;
+    }
+    if (this.degree === 3) {
+      res += 5;
+    }
+    if (this.degree === 4) {
+      res += 7;
+    }
+    if (this.degree === 5) {
+      res += 8;
+    }
+    if (this.degree === 6) {
+      res += 10;
+    }
+
+    if (this.isMajor) {
+      res += 1;
+    }
+
+    if (this.isAugmented) {
+      const perfectType =
+        this.degree === 0 || this.degree === 3 || this.degree === 4;
+      if (!perfectType) {
+        res += 1;
+      }
+    }
+
+    res += this.shift;
+
+    return res;
+  };
+
   static between = (a: Note, b: Note) => {
     // Make b > a
     if (a.getGlobalPosition() > b.getGlobalPosition()) {

@@ -150,7 +150,62 @@ const i8d = new Interval(0, 1, false, false, false, true, false, -1);
 const i8a = new Interval(0, 1, false, false, false, false, true, 1);
 
 //================================
-// Test
+// Interval pitch test
+//================================
+
+test.each([
+  // 1
+  [i1p, 0],
+  [i1a, 1],
+  [i1p2, 2 * 12],
+  // 2
+  [i2d, 0],
+  [i2m, 1],
+  [i2p, 2],
+  [i2a, 3],
+  [i2p1, 12 + 2],
+  [i2a1, 12 + 3],
+  // 3
+  [i3d, 2],
+  [i3m, 3],
+  [i3p, 4],
+  [i3a, 5],
+  [i3m1, 12 + 3],
+  [i3p1, 12 + 4],
+  [i3a1, 12 + 5],
+  // 4
+  [i4d, 4],
+  [i4p, 5],
+  [i4a, 6],
+  [i4aa, 7],
+  [i4a1, 12 + 6],
+  // 5
+  [i5dd, 5],
+  [i5d, 6],
+  [i5p, 7],
+  [i5a, 8],
+  [i5d1, 12 + 6],
+  // 6
+  [i6d, 7],
+  [i6m, 8],
+  [i6p, 9],
+  [i6a, 10],
+  // 7
+  [i7d, 9],
+  [i7m, 10],
+  [i7p, 11],
+  [i7a, 12],
+  [i7m1, 12 + 10],
+  // 8
+  [i8d, 11],
+  [i8p, 12],
+  [i8a, 13],
+])("Interval pitch %#", (interval: Interval, pitch: number) => {
+  expect(interval.toPitch()).toBe(pitch);
+});
+
+//================================
+// Two notes interval test
 //================================
 
 const validator = (n1: Note, n2: Note, expected: Interval) => {
