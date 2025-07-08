@@ -2,5 +2,10 @@
 export default defineNuxtConfig({
   compatibilityDate: '2025-05-15',
   devtools: { enabled: true },
-  modules: ['@nuxt/eslint', '@nuxt/icon', '@nuxt/test-utils']
+  modules: [
+    '@nuxt/eslint',
+    '@nuxt/icon',
+    '@nuxt/test-utils',
+    '@nuxt/fonts'
+  ]
 })

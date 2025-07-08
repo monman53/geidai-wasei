@@ -1,16 +1,15 @@
 <script setup>
+import bravuraMetadata from '@/assets/bravura_metadata.json'
+// const { data:  } = await useFetch('/bravura_metadata.json')
 </script>
 
 <template>
   <div>
     <h2>楽譜</h2>
     <svg width="800" height="200" viewBox="-200 -50 400 100">
-        <text x="5" y="-5" class="bravura-text" fill="red">&#xe050;</text>
-        <line x1="0" y1="0" x2="100" y2="0" stroke="black" />
-        <line x1="0" y1="-5" x2="100" y2="-5" stroke="black" />
-        <line x1="0" y1="-10" x2="100" y2="-10" stroke="black" />
-        <line x1="0" y1="-15" x2="100" y2="-15" stroke="black" />
-        <line x1="0" y1="-20" x2="100" y2="-20" stroke="black" />
+        <line v-for="i in [0, 1, 2, 3, 4]" :key="i" x1="0" :y1="-4*i" x2="100" :y2="-4*i" stroke="black"  :stroke-width="bravuraMetadata.engravingDefaults.staffLineThickness"/>
+        <text x="4" y="-4" class="bravura-text">&#xe050;</text>
+        <text :x="100 - bravuraMetadata.glyphAdvanceWidths.barlineDouble * 4" y="0" class="bravura-text">&#xe031;</text>
     </svg>
   </div>
 </template>
@@ -31,7 +30,7 @@
 
     .bravura-text {
         font-family: 'Bravura', sans-serif;
-        font-size: 20px;
+        /* font-size: 20px; */
         /* fill: black; */
         /* fill: red; */
     }
