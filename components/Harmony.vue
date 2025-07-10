@@ -45,8 +45,10 @@ const playChord = () => {
     audioContext = new window.AudioContext();
   }
 
-  if (oscillators.length > 0) {
-    stopChord(true);
+  if (oscillators.length === 0) {
+    for (let i = -11; i <= 12; i++) {
+      oscillators.push();
+    }
   }
 
   isPlaying.value = true;
@@ -74,7 +76,7 @@ const playChord = () => {
     return osc;
   });
 
-  gainNode.gain.linearRampToValueAtTime(0.2, audioContext.currentTime + 0.01);
+  gainNode.gain.linearRampToValueAtTime(0.1, audioContext.currentTime + 0.01);
   oscillators.forEach((osc) => osc.start());
 };
 
@@ -149,12 +151,15 @@ onUnmounted(() => {
   <text v-for="y in ledger2ys" :x="x" :y="y" class="bravura-text"
     >&#xe022;</text
   >
+  <text :x="x" :y="staffGap / 2 + 4 * u + 5.5 * u" class="yuzuri-text">{{
+    chordToYuzuri(harmony.chord)
+  }}</text>
   <!-- UI -->
   <rect
     :x="x - u"
     :y="-staffGap / 2 - 8 * u"
     :width="4 * u"
-    :height="staffGap + 2 * 8 * u"
+    :height="staffGap + 2 * 8 * u + 3 * u"
     class="play-rect"
     :class="{ active: isPlaying }"
     @mousedown="handleInteractionStart"
@@ -165,6 +170,16 @@ onUnmounted(() => {
 </template>
 
 <style>
+@font-face {
+  font-family: "Yuzuri";
+  src: url("Yuzuri-RomanNumerals-Regular.otf") format("opentype");
+}
+
+.yuzuri-text {
+  font-family: "Yuzuri", sans-serif;
+  font-size: 0.35em;
+}
+
 .play-rect {
   fill: transparent;
   cursor: pointer;
@@ -172,11 +187,11 @@ onUnmounted(() => {
 }
 
 .play-rect:hover {
-  fill: #0002;
+  fill: #00f2;
 }
 
 /* isPlayingがtrueの時にactiveクラスが付与されます */
 .play-rect.active {
-  fill: #0004;
+  fill: #00f4;
 }
 </style>

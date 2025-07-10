@@ -11,7 +11,7 @@ const vMargin = 2 * u;
 const vMinX = computed(() => -vMargin);
 const vMinY = computed(() => -12 * u - vMargin);
 const vWidth = computed(() => width.value + 2 * vMargin);
-const vHeight = computed(() => 24 * u + 2 * vMargin);
+const vHeight = computed(() => 24 * u + 2 * u + 2 * vMargin);
 
 const viewBox = computed(() => {
   return `${vMinX.value} ${vMinY.value} ${vWidth.value} ${vHeight.value}`;
