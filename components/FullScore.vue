@@ -62,7 +62,7 @@ const svgHeight = computed(() => {
         &#xe062;
       </text>
       <!-- 和音 -->
-      <Harmony
+      <FullHarmony
         v-for="(h, h_idx) in harmonies"
         :key="h_idx"
         :u="u"
@@ -78,6 +78,16 @@ const svgHeight = computed(() => {
 @font-face {
   font-family: "Bravura";
   src: url("Bravura.otf") format("opentype");
+}
+
+@font-face {
+  font-family: "Yuzuri";
+  src: url("Yuzuri-RomanNumerals-Regular.otf") format("opentype");
+}
+
+.yuzuri-text {
+  font-family: "Yuzuri", sans-serif;
+  font-size: 0.35em;
 }
 
 svg {

@@ -8,11 +8,11 @@ export enum Chord {
 
 export class Harmony {
   constructor(
-    public chord: Chord,
-    public bas: number,
-    public ten: number,
-    public alt: number,
-    public sop: number
+    public chord: Chord | null,
+    public bas: number | null,
+    public ten: number | null,
+    public alt: number | null,
+    public sop: number | null
   ) {}
 }
 

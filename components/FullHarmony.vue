@@ -10,24 +10,51 @@ const props = defineProps<{
 
 // 加線の座標を算出
 const ledger2ys = computed(() => {
-  const m = Math.max(props.harmony.bas, props.harmony.ten);
-  let ys = [];
+  let m = 0;
+  if (props.harmony.bas !== null && props.harmony.ten !== null) {
+    m = Math.max(props.harmony.bas, props.harmony.ten);
+  } else if (props.harmony.bas === null && props.harmony.ten !== null) {
+    m = props.harmony.ten;
+  } else if (props.harmony.ten === null && props.harmony.bas !== null) {
+    m = props.harmony.bas;
+  } else {
+    return [];
+  }
+  const ys = [];
   for (let i = 0; i < Math.floor((m - 0) / 2) + 1; i++) {
     ys.push(props.staffGap / 2 - (i + 1) * props.u);
   }
   return ys;
 });
 const ledger3ys = computed(() => {
-  const m = Math.min(props.harmony.alt, props.harmony.sop);
-  let ys = [];
+  let m = 0;
+  if (props.harmony.alt !== null && props.harmony.sop !== null) {
+    m = Math.min(props.harmony.alt, props.harmony.sop);
+  } else if (props.harmony.alt === null && props.harmony.sop !== null) {
+    m = props.harmony.sop;
+  } else if (props.harmony.sop === null && props.harmony.alt !== null) {
+    m = props.harmony.alt;
+  } else {
+    return [];
+  }
+  const ys = [];
   for (let i = 0; i < Math.floor((0 - m) / 2) + 1; i++) {
     ys.push(-props.staffGap / 2 + (i + 1) * props.u);
   }
   return ys;
 });
 const ledger4ys = computed(() => {
-  const m = Math.max(props.harmony.alt, props.harmony.sop);
-  let ys = [];
+  let m = 0;
+  if (props.harmony.alt !== null && props.harmony.sop !== null) {
+    m = Math.max(props.harmony.alt, props.harmony.sop);
+  } else if (props.harmony.alt === null && props.harmony.sop !== null) {
+    m = props.harmony.sop;
+  } else if (props.harmony.sop === null && props.harmony.alt !== null) {
+    m = props.harmony.alt;
+  } else {
+    return [];
+  }
+  const ys = [];
   for (let i = 0; i < Math.floor((m - 12) / 2) + 1; i++) {
     ys.push(-props.staffGap / 2 - 4 * props.u - (i + 1) * props.u);
   }
@@ -57,7 +84,7 @@ const playChord = () => {
     props.harmony.alt,
     props.harmony.sop,
   ].map((degree) => {
-    return degreeToFreq(degree);
+    return degree !== null ? degreeToFreq(degree) : 0;
   });
   oscillators = frequencies.map((freq) => {
     if (audioContext === null) {
@@ -82,11 +109,7 @@ const stopChord = (immediate: boolean = false) => {
   if (immediate) {
     // 即時停止
     oscillators.forEach((osc) => {
-      try {
-        osc.stop();
-      } catch (e) {
-        // すでに停止している場合のエラーを無視
-      }
+      osc.stop();
     });
   } else {
     const fadeOutTime = audioContext.currentTime + 0.05;
@@ -120,33 +143,68 @@ onUnmounted(() => {
 <template>
   <!-- 音符 -->
   <!-- bas -->
-  <text :x="x" :y="u * 3 + -2 * harmony.bas" class="bravura-text">
+  <text
+    v-if="harmony.bas !== null"
+    :x="x"
+    :y="u * 3 + -2 * harmony.bas"
+    class="bravura-text"
+  >
     &#xe1d4;
   </text>
   <!-- ten -->
-  <text :x="x" :y="u * 3 + -2 * harmony.ten" class="bravura-text">
+  <text
+    v-if="harmony.ten !== null"
+    :x="x"
+    :y="u * 3 + -2 * harmony.ten"
+    class="bravura-text"
+  >
     &#xe1d3;
   </text>
   <!-- alt -->
-  <text :x="x" :y="-u * 3 + -2 * harmony.alt" class="bravura-text">
+  <text
+    v-if="harmony.alt !== null"
+    :x="x"
+    :y="-u * 3 + -2 * harmony.alt"
+    class="bravura-text"
+  >
     &#xe1d4;
   </text>
   <!-- sop -->
-  <text :x="x" :y="-u * 3 + -2 * harmony.sop" class="bravura-text">
+  <text
+    v-if="harmony.sop !== null"
+    :x="x"
+    :y="-u * 3 + -2 * harmony.sop"
+    class="bravura-text"
+  >
     &#xe1d3;
   </text>
   <!-- 加線 -->
-  <text v-for="y in ledger4ys" :x="x" :y="y" class="bravura-text"
+  <text
+    v-for="(y, idx) in ledger4ys"
+    :key="idx"
+    :x="x"
+    :y="y"
+    class="bravura-text"
     >&#xe022;</text
   >
-  <text v-for="y in ledger3ys" :x="x" :y="y" class="bravura-text"
+  <text
+    v-for="(y, idx) in ledger3ys"
+    :key="idx"
+    :x="x"
+    :y="y"
+    class="bravura-text"
     >&#xe022;</text
   >
-  <text v-for="y in ledger2ys" :x="x" :y="y" class="bravura-text"
+  <text
+    v-for="(y, idx) in ledger2ys"
+    :key="idx"
+    :x="x"
+    :y="y"
+    class="bravura-text"
     >&#xe022;</text
   >
   <text :x="x" :y="staffGap / 2 + 4 * u + 5.5 * u" class="yuzuri-text">{{
-    chordToYuzuri(harmony.chord)
+    harmony.chord !== null ? chordToYuzuri(harmony.chord) : ""
   }}</text>
   <!-- UI -->
   <rect
@@ -164,16 +222,6 @@ onUnmounted(() => {
 </template>
 
 <style>
-@font-face {
-  font-family: "Yuzuri";
-  src: url("Yuzuri-RomanNumerals-Regular.otf") format("opentype");
-}
-
-.yuzuri-text {
-  font-family: "Yuzuri", sans-serif;
-  font-size: 0.35em;
-}
-
 .play-rect {
   fill: transparent;
   cursor: pointer;

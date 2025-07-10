@@ -29,7 +29,8 @@ const harmonies2 = [
 <template>
   <div>
     <h1>藝大和声I巻</h1>
-    <Score :harmonies="harmonies" />
-    <Score :harmonies="harmonies2" />
+    <h2>バス課題作成</h2>
+    <FullScore :harmonies="harmonies" />
+    <FullScore :harmonies="harmonies2" />
   </div>
 </template>
