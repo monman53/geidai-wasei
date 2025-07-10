@@ -90,12 +90,7 @@ svg {
 }
 
 svg text {
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
   user-select: none;
-}
-svg text::selection {
-  background: none;
+  pointer-events: none;
 }
 </style>
