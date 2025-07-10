@@ -88,4 +88,14 @@ svg {
   font-family: "Bravura", sans-serif;
   font-size: 16px; /* 1em */
 }
+
+svg text {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+svg text::selection {
+  background: none;
+}
 </style>
