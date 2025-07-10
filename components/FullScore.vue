@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import bravuraMetadata from "@/assets/bravura_metadata.json";
 
-const props = defineProps<{ harmonies: Harmony[] }>();
+const props = defineProps<{ harmonies: Harmony[]; mode: Mode }>();
 const u = 4;
 const width = computed(() => {
   return 6 * u + 4 * u * props.harmonies.length;
@@ -65,6 +65,7 @@ const svgHeight = computed(() => {
       <FullHarmony
         v-for="(h, h_idx) in harmonies"
         :key="h_idx"
+        :mode="mode"
         :u="u"
         :staff-gap="8 * u"
         :x="24 + 16 * h_idx"

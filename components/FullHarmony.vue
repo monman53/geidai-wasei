@@ -2,6 +2,7 @@
 import { ref, onUnmounted } from "vue";
 
 const props = defineProps<{
+  mode: Mode;
   u: number;
   staffGap: number;
   harmony: Harmony;
@@ -11,11 +12,22 @@ const props = defineProps<{
 // 加線の座標を算出
 const ledger2ys = computed(() => {
   let m = 0;
-  if (props.harmony.bas !== null && props.harmony.ten !== null) {
+  if (
+    props.harmony.bas !== null &&
+    props.harmony.ten !== null &&
+    props.mode === Mode.Solve
+  ) {
     m = Math.max(props.harmony.bas, props.harmony.ten);
-  } else if (props.harmony.bas === null && props.harmony.ten !== null) {
+  } else if (
+    props.harmony.bas === null &&
+    props.harmony.ten !== null &&
+    props.mode === Mode.Solve
+  ) {
     m = props.harmony.ten;
-  } else if (props.harmony.ten === null && props.harmony.bas !== null) {
+  } else if (
+    (props.harmony.ten === null && props.harmony.bas !== null) ||
+    (props.mode == Mode.BassEdit && props.harmony.bas !== null)
+  ) {
     m = props.harmony.bas;
   } else {
     return [];
@@ -80,9 +92,9 @@ const playChord = () => {
 
   const frequencies = [
     props.harmony.bas,
-    props.harmony.ten,
-    props.harmony.alt,
-    props.harmony.sop,
+    props.mode === Mode.Solve ? props.harmony.ten : null,
+    props.mode === Mode.Solve ? props.harmony.alt : null,
+    props.mode === Mode.Solve ? props.harmony.sop : null,
   ].map((degree) => {
     return degree !== null ? degreeToFreq(degree) : 0;
   });
@@ -153,7 +165,7 @@ onUnmounted(() => {
   </text>
   <!-- ten -->
   <text
-    v-if="harmony.ten !== null"
+    v-if="harmony.ten !== null && mode === Mode.Solve"
     :x="x"
     :y="u * 3 + -2 * harmony.ten"
     class="bravura-text"
@@ -162,7 +174,7 @@ onUnmounted(() => {
   </text>
   <!-- alt -->
   <text
-    v-if="harmony.alt !== null"
+    v-if="harmony.alt !== null && mode === Mode.Solve"
     :x="x"
     :y="-u * 3 + -2 * harmony.alt"
     class="bravura-text"
@@ -171,7 +183,7 @@ onUnmounted(() => {
   </text>
   <!-- sop -->
   <text
-    v-if="harmony.sop !== null"
+    v-if="harmony.sop !== null && mode === Mode.Solve"
     :x="x"
     :y="-u * 3 + -2 * harmony.sop"
     class="bravura-text"
@@ -179,22 +191,24 @@ onUnmounted(() => {
     &#xe1d3;
   </text>
   <!-- 加線 -->
-  <text
-    v-for="(y, idx) in ledger4ys"
-    :key="idx"
-    :x="x"
-    :y="y"
-    class="bravura-text"
-    >&#xe022;</text
-  >
-  <text
-    v-for="(y, idx) in ledger3ys"
-    :key="idx"
-    :x="x"
-    :y="y"
-    class="bravura-text"
-    >&#xe022;</text
-  >
+  <g v-if="mode === Mode.Solve">
+    <text
+      v-for="(y, idx) in ledger4ys"
+      :key="idx"
+      :x="x"
+      :y="y"
+      class="bravura-text"
+      >&#xe022;</text
+    >
+    <text
+      v-for="(y, idx) in ledger3ys"
+      :key="idx"
+      :x="x"
+      :y="y"
+      class="bravura-text"
+      >&#xe022;</text
+    >
+  </g>
   <text
     v-for="(y, idx) in ledger2ys"
     :key="idx"

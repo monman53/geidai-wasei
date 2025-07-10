@@ -24,13 +24,25 @@ const harmonies2 = [
   new Harmony(Chord.I, 0, 4, 8, 11),
   new Harmony(Chord.I, 1, 5, 8, 12),
 ];
+
+const mode = ref<Mode>(Mode.BassEdit);
 </script>
 
 <template>
   <div>
-    <h1>藝大和声I巻</h1>
-    <h2>バス課題作成</h2>
-    <FullScore :harmonies="harmonies" />
-    <FullScore :harmonies="harmonies2" />
+    <h1>藝大和声 I 巻</h1>
+    <label>
+      <input type="radio" v-model="mode" :value="Mode.BassEdit" />
+      バス課題作成
+    </label>
+    <label>
+      <input type="radio" v-model="mode" :value="Mode.Solve" />
+      実施
+    </label>
+    <FullScore :harmonies="harmonies" :mode="mode" />
+    <details>
+      <summary>Debug</summary>
+      <FullScore :harmonies="harmonies2" :mode="mode" />
+    </details>
   </div>
 </template>
