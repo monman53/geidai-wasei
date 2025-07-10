@@ -45,12 +45,6 @@ const playChord = () => {
     audioContext = new window.AudioContext();
   }
 
-  if (oscillators.length === 0) {
-    for (let i = -11; i <= 12; i++) {
-      oscillators.push();
-    }
-  }
-
   isPlaying.value = true;
 
   gainNode = audioContext.createGain();
