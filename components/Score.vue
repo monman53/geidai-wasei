@@ -17,7 +17,7 @@ const viewBox = computed(() => {
   return `${vMinX.value} ${vMinY.value} ${vWidth.value} ${vHeight.value}`;
 });
 
-const svgScale = 2;
+const svgScale = 3;
 const svgWidth = computed(() => {
   return svgScale * vWidth.value;
 });
@@ -28,7 +28,6 @@ const svgHeight = computed(() => {
 
 <template>
   <div>
-    <h2>楽譜</h2>
     <svg :width="svgWidth" :height="svgHeight" :view-box.camel="viewBox">
       <!-- <svg width="800" height="200" viewBox="-200 -50 400 100"> -->
       <!-- 五線 -->
@@ -65,11 +64,12 @@ const svgHeight = computed(() => {
       <!-- 和音 -->
       <Harmony
         v-for="(h, h_idx) in harmonies"
-        :u="u"
         :key="h_idx"
+        :u="u"
+        :staff-gap="8 * u"
         :x="24 + 16 * h_idx"
         :harmony="h"
-      ></Harmony>
+      />
     </svg>
   </div>
 </template>
