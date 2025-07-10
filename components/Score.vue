@@ -62,32 +62,14 @@ const svgHeight = computed(() => {
       <text :x="u" :y="u * 4 + u * 4 - 3 * u" class="bravura-text">
         &#xe062;
       </text>
-      <g v-for="(h, h_idx) in harmonies" :key="h_idx">
-        <!-- bas -->
-        <text :x="24 + 16 * h_idx" :y="u * 3 + -2 * h.bas" class="bravura-text">
-          &#xe1d4;
-        </text>
-        <!-- ten -->
-        <text :x="24 + 16 * h_idx" :y="u * 3 + -2 * h.ten" class="bravura-text">
-          &#xe1d3;
-        </text>
-        <!-- alt -->
-        <text
-          :x="24 + 16 * h_idx"
-          :y="-u * 3 + -2 * h.alt"
-          class="bravura-text"
-        >
-          &#xe1d4;
-        </text>
-        <!-- sop -->
-        <text
-          :x="24 + 16 * h_idx"
-          :y="-u * 3 + -2 * h.sop"
-          class="bravura-text"
-        >
-          &#xe1d3;
-        </text>
-      </g>
+      <!-- 和音 -->
+      <Harmony
+        v-for="(h, h_idx) in harmonies"
+        :u="u"
+        :key="h_idx"
+        :x="24 + 16 * h_idx"
+        :harmony="h"
+      ></Harmony>
     </svg>
   </div>
 </template>

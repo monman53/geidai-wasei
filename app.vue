@@ -12,6 +12,6 @@ const harmonies = [
 <template>
   <div>
     <h1>藝大和声I巻</h1>
-    <MainScore :harmonies="harmonies" />
+    <Score :harmonies="harmonies" />
   </div>
 </template>
