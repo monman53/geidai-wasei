@@ -11,7 +11,7 @@ const vMargin = 2 * u;
 const vMinX = computed(() => -vMargin);
 const vMinY = computed(() => -12 * u - vMargin);
 const vWidth = computed(() => width.value + 2 * vMargin);
-const vHeight = computed(() => 24 * u + 2 * vMargin);
+const vHeight = computed(() => 24 * u + 2 * u + 2 * vMargin);
 
 const viewBox = computed(() => {
   return `${vMinX.value} ${vMinY.value} ${vWidth.value} ${vHeight.value}`;
@@ -62,7 +62,7 @@ const svgHeight = computed(() => {
         &#xe062;
       </text>
       <!-- 和音 -->
-      <Harmony
+      <FullHarmony
         v-for="(h, h_idx) in harmonies"
         :key="h_idx"
         :u="u"
@@ -78,6 +78,16 @@ const svgHeight = computed(() => {
 @font-face {
   font-family: "Bravura";
   src: url("Bravura.otf") format("opentype");
+}
+
+@font-face {
+  font-family: "Yuzuri";
+  src: url("Yuzuri-RomanNumerals-Regular.otf") format("opentype");
+}
+
+.yuzuri-text {
+  font-family: "Yuzuri", sans-serif;
+  font-size: 0.35em;
 }
 
 svg {
