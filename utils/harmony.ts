@@ -13,7 +13,6 @@ export enum Chord {
   V_1,
   // 第2転回位置
   I_2,
-  // II_2
   IV_2,
   V_2,
   // 7の和音
@@ -47,20 +46,54 @@ export const chordToYuzuri = (chord: Chord) => {
     case Chord.I:
       return "Q";
     case Chord.II:
-      return "X";
+      return "W";
     case Chord.IV:
       return "R";
     case Chord.V:
-      return "B";
+      return "T";
     case Chord.VI:
       return "Y";
+    case Chord.I_1:
+      return "Q1";
+    case Chord.II_1:
+      return "W1";
+    case Chord.IV_1:
+      return "R1";
+    case Chord.V_1:
+      return "T1";
+    case Chord.I_2:
+      return "Q2";
+    case Chord.IV_2:
+      return "R2";
+    case Chord.V_2:
+      return "T2";
+    case Chord.V7:
+      return "T7";
+    case Chord.V7_1:
+      return "T71";
+    case Chord.V7_2:
+      return "T72";
+    case Chord.V7_3:
+      return "T73";
+    case Chord.V7_:
+      return "rT7";
+    case Chord.V7_2_:
+      return "rT72";
+    case Chord.V9:
+      return "T9";
+    case Chord.V9_1_:
+      return "rT91";
+    case Chord.V9_2_:
+      return "rT92";
+    case Chord.V9_3_:
+      return "rT93";
     default:
       console.error("Not implemented: ", chord);
   }
 };
 
 export const bassToChords = (bass: number): Chord[] => {
-  switch (bass % 7) {
+  switch ((bass + 700) % 7) {
     case 0:
       return [Chord.I, Chord.IV_2];
     case 1:

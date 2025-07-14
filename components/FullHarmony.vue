@@ -1,9 +1,11 @@
 <script setup lang="ts">
 import { ref, onUnmounted } from "vue";
+import { harmonies } from "./states";
 
 const props = defineProps<{
   mode: Mode;
   u: number;
+  idx: number;
   staffGap: number;
   harmony: Harmony;
   x: number;
@@ -153,7 +155,12 @@ onUnmounted(() => {
 
 // バス設定
 const setBass = (bass: number) => {
-  props.harmony.bas = bass;
+  harmonies.value[props.idx].bas = bass;
+  harmonies.value[props.idx].chord = null;
+  playChord();
+};
+const setChord = (chord: Chord) => {
+  harmonies.value[props.idx].chord = chord;
 };
 </script>
 
@@ -198,33 +205,31 @@ const setBass = (bass: number) => {
   <!-- 加線 -->
   <g v-if="mode === Mode.Solve">
     <text
-      v-for="(y, idx) in ledger4ys"
-      :key="idx"
+      v-for="(y, i) in ledger4ys"
+      :key="i"
       :x="x"
       :y="y"
       class="bravura-text"
       >&#xe022;</text
     >
     <text
-      v-for="(y, idx) in ledger3ys"
-      :key="idx"
+      v-for="(y, i) in ledger3ys"
+      :key="i"
       :x="x"
       :y="y"
       class="bravura-text"
       >&#xe022;</text
     >
   </g>
-  <text
-    v-for="(y, idx) in ledger2ys"
-    :key="idx"
-    :x="x"
-    :y="y"
-    class="bravura-text"
+  <text v-for="(y, i) in ledger2ys" :key="i" :x="x" :y="y" class="bravura-text"
     >&#xe022;</text
   >
-  <text :x="x" :y="staffGap / 2 + 4 * u + 5.5 * u" class="yuzuri-text">{{
-    harmony.chord !== null ? chordToYuzuri(harmony.chord) : ""
-  }}</text>
+  <!-- 和音記号 -->
+  <g v-if="harmony.chord !== null">
+    <text :x="x" :y="staffGap / 2 + 4 * u + 5.5 * u" class="yuzuri-text">{{
+      chordToYuzuri(harmony.chord)
+    }}</text>
+  </g>
   <!-- UI -->
   <rect
     :x="x - u"
@@ -240,9 +245,16 @@ const setBass = (bass: number) => {
   />
   <g v-if="mode === Mode.BassEdit">
     <g
-      v-for="(bas, idx) in [-11, -10, -9, -8, -7, -6, -5, -4, -3, -2, -1, 0, 1]"
-      :key="idx"
+      v-for="(bas, i) in [-11, -10, -9, -8, -7, -6, -5, -4, -3, -2, -1, 0, 1]"
+      :key="i"
       class="edit-bass"
+      @mousedown="
+        () => {
+          setBass(bas);
+        }
+      "
+      @mouseup="handleInteractionEnd"
+      @mouseleave="handleInteractionEnd"
     >
       <text :x="x" :y="u * 3 + -2 * bas" class="bravura-text"> &#xe1d4; </text>
       <rect
@@ -253,9 +265,29 @@ const setBass = (bass: number) => {
       />
     </g>
   </g>
+  <!-- 和音選択 -->
+  <g v-if="harmony.chord === null && harmony.bas !== null">
+    <text
+      v-for="(chord, i) in bassToChords(harmony.bas)"
+      :key="i"
+      :x="x"
+      :y="staffGap / 2 + 4 * u + 5.5 * u + i * 2 * u"
+      class="yuzuri-text pending-chord pointer pointable"
+      @mousedown="
+        () => {
+          setChord(chord);
+        }
+      "
+      >{{ chordToYuzuri(chord) }}</text
+    >
+  </g>
 </template>
 
 <style>
+.pointer {
+  cursor: pointer;
+}
+
 .play-rect,
 .edit-bass {
   fill: transparent;
@@ -273,5 +305,9 @@ const setBass = (bass: number) => {
 /* isPlayingがtrueの時にactiveクラスが付与されます */
 .play-rect.active {
   fill: #00f4;
+}
+
+.pending-chord {
+  fill: #bbb;
 }
 </style>
