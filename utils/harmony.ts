@@ -56,8 +56,13 @@ export const V7s = [
 ];
 export const V9s = [Chord.V9, Chord.V9_1_, Chord.V9_2_, Chord.V9_3_];
 
+export enum Key {
+  C,
+}
+
 export class Harmony {
   constructor(
+    public key: Key,
     public chord: Chord | null,
     public bas: number | null,
     public ten: number | null,
@@ -222,3 +227,28 @@ export const chordBas = (chord: Chord): number => {
 export class Music {
   constructor(public harmonies: Harmony[], public penalty: number) {}
 }
+
+export const voiceRange = (key: Key) => {
+  switch (key) {
+    case Key.C:
+    default:
+      return {
+        bas: {
+          min: -14 + 3,
+          max: 1,
+        },
+        ten: {
+          min: -7,
+          max: 5,
+        },
+        alt: {
+          min: -7 + 4,
+          max: 7 + 1,
+        },
+        sop: {
+          min: 0,
+          max: 7 + 5,
+        },
+      };
+  }
+};
