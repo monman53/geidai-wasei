@@ -134,7 +134,7 @@ const stopChord = (immediate: boolean = false) => {
 };
 
 const handleInteractionStart = (e: MouseEvent) => {
-  if (e.buttons !== 0) {
+  if (e.buttons === 1) {
     playChord();
   }
 };
@@ -150,6 +150,11 @@ onUnmounted(() => {
     audioContext = null;
   }
 });
+
+// バス設定
+const setBass = (bass: number) => {
+  props.harmony.bas = bass;
+};
 </script>
 
 <template>
@@ -233,10 +238,26 @@ onUnmounted(() => {
     @mouseenter="handleInteractionStart"
     @mouseleave="handleInteractionEnd"
   />
+  <g v-if="mode === Mode.BassEdit">
+    <g
+      v-for="(bas, idx) in [-11, -10, -9, -8, -7, -6, -5, -4, -3, -2, -1, 0, 1]"
+      :key="idx"
+      class="edit-bass"
+    >
+      <text :x="x" :y="u * 3 + -2 * bas" class="bravura-text"> &#xe1d4; </text>
+      <rect
+        :x="x - u"
+        :y="u * 3 - (1 / 4) * u + -2 * bas"
+        :width="4 * u"
+        :height="(1 / 2) * u"
+      />
+    </g>
+  </g>
 </template>
 
 <style>
-.play-rect {
+.play-rect,
+.edit-bass {
   fill: transparent;
   cursor: pointer;
   /* transition: all 0.15s ease-out; */
@@ -244,6 +265,9 @@ onUnmounted(() => {
 
 .play-rect:hover {
   fill: #00f2;
+}
+.edit-bass:hover text {
+  fill: #0006;
 }
 
 /* isPlayingがtrueの時にactiveクラスが付与されます */
