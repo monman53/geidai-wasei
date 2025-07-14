@@ -31,6 +31,31 @@ export enum Chord {
   V9_3_,
 }
 
+export const Vs = [
+  Chord.V,
+  Chord.V_1,
+  Chord.V_2,
+  Chord.V7,
+  Chord.V7_1,
+  Chord.V7_2,
+  Chord.V7_3,
+  Chord.V7_,
+  Chord.V7_2_,
+  Chord.V9,
+  Chord.V9_1_,
+  Chord.V9_2_,
+  Chord.V9_3_,
+];
+export const V7s = [
+  Chord.V7,
+  Chord.V7_1,
+  Chord.V7_2,
+  Chord.V7_3,
+  Chord.V7_,
+  Chord.V7_2_,
+];
+export const V9s = [Chord.V9, Chord.V9_1_, Chord.V9_2_, Chord.V9_3_];
+
 export class Harmony {
   constructor(
     public chord: Chord | null,
@@ -111,3 +136,89 @@ export const bassToChords = (bass: number): Chord[] => {
   }
   return [];
 };
+
+export const chordDegrees = (chord: Chord): number[] => {
+  switch (chord) {
+    case Chord.I:
+    case Chord.I_1:
+    case Chord.I_2:
+      return [0, 2, 4];
+    case Chord.II:
+    case Chord.II_1:
+      return [1, 3, 5];
+    case Chord.IV:
+    case Chord.IV_1:
+    case Chord.IV_2:
+      return [3, 5, 0];
+    case Chord.V:
+    case Chord.V_1:
+    case Chord.V_2:
+      return [4, 6, 1];
+    case Chord.VI:
+      return [5, 0, 2];
+    case Chord.V7:
+    case Chord.V7_1:
+    case Chord.V7_2:
+    case Chord.V7_3:
+      return [4, 6, 1, 3];
+    case Chord.V7_2_:
+      return [6, 1, 3];
+    case Chord.V9:
+      return [4, 6, 3, 5];
+    case Chord.V9_1_:
+    case Chord.V9_2_:
+    case Chord.V9_3_:
+      return [6, 1, 3, 5];
+    default:
+      console.error("Not implemented: ", chord);
+      return [];
+  }
+};
+
+export const chordBas = (chord: Chord): number => {
+  const chord_deg = chordDegrees(chord);
+  switch (chord) {
+    // 基本位置
+    case Chord.I:
+    case Chord.II:
+    case Chord.IV:
+    case Chord.V:
+    case Chord.VI:
+    case Chord.V7:
+    case Chord.V9:
+      return chord_deg[0];
+    // 第1転回位置
+    case Chord.I_1:
+    case Chord.II_1:
+    case Chord.IV_1:
+    case Chord.V_1:
+    case Chord.V7_1:
+      return chord_deg[1];
+    // 第2転回位置
+    case Chord.I_2:
+    case Chord.IV_2:
+    case Chord.V_2:
+    case Chord.V7_2:
+      return chord_deg[2];
+    // 第3転回位置
+    case Chord.V7_3:
+      return chord_deg[3];
+    // 第1転回位置（根音省略）
+    case Chord.V7_2_:
+      return chord_deg[1];
+    // TODO: Check
+    case Chord.V9_1_:
+      return chord_deg[1];
+    case Chord.V9_2_:
+      return chord_deg[2];
+    case Chord.V9_3_:
+      return chord_deg[3];
+    default:
+      console.error("Not implemented: ", chord);
+      return -1;
+  }
+};
+
+export class Music {
+  constructor(public harmonies: Harmony[], public penalty: number) {}
+}
