@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import bravuraMetadata from "@/assets/bravura_metadata.json";
 
-const props = defineProps<{ harmonies: Harmony[] }>();
+const props = defineProps<{ harmonies: Harmony[]; mode: Mode }>();
 const u = 4;
 const width = computed(() => {
   return 6 * u + 4 * u * props.harmonies.length;
@@ -11,7 +11,7 @@ const vMargin = 2 * u;
 const vMinX = computed(() => -vMargin);
 const vMinY = computed(() => -12 * u - vMargin);
 const vWidth = computed(() => width.value + 2 * vMargin);
-const vHeight = computed(() => 24 * u + 2 * u + 2 * vMargin);
+const vHeight = computed(() => 24 * u + 2 * u + 2 * vMargin + 5 * 2 * u);
 
 const viewBox = computed(() => {
   return `${vMinX.value} ${vMinY.value} ${vWidth.value} ${vHeight.value}`;
@@ -65,7 +65,9 @@ const svgHeight = computed(() => {
       <FullHarmony
         v-for="(h, h_idx) in harmonies"
         :key="h_idx"
+        :mode="mode"
         :u="u"
+        :idx="h_idx"
         :staff-gap="8 * u"
         :x="24 + 16 * h_idx"
         :harmony="h"
@@ -102,5 +104,10 @@ svg {
 svg text {
   user-select: none;
   pointer-events: none;
+}
+
+svg text.pointable {
+  user-select: auto;
+  pointer-events: auto;
 }
 </style>

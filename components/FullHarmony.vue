@@ -1,8 +1,11 @@
 <script setup lang="ts">
 import { ref, onUnmounted } from "vue";
+import { harmonies } from "./states";
 
 const props = defineProps<{
+  mode: Mode;
   u: number;
+  idx: number;
   staffGap: number;
   harmony: Harmony;
   x: number;
@@ -11,11 +14,22 @@ const props = defineProps<{
 // 加線の座標を算出
 const ledger2ys = computed(() => {
   let m = 0;
-  if (props.harmony.bas !== null && props.harmony.ten !== null) {
+  if (
+    props.harmony.bas !== null &&
+    props.harmony.ten !== null &&
+    props.mode === Mode.Solve
+  ) {
     m = Math.max(props.harmony.bas, props.harmony.ten);
-  } else if (props.harmony.bas === null && props.harmony.ten !== null) {
+  } else if (
+    props.harmony.bas === null &&
+    props.harmony.ten !== null &&
+    props.mode === Mode.Solve
+  ) {
     m = props.harmony.ten;
-  } else if (props.harmony.ten === null && props.harmony.bas !== null) {
+  } else if (
+    (props.harmony.ten === null && props.harmony.bas !== null) ||
+    (props.mode == Mode.BassEdit && props.harmony.bas !== null)
+  ) {
     m = props.harmony.bas;
   } else {
     return [];
@@ -80,9 +94,9 @@ const playChord = () => {
 
   const frequencies = [
     props.harmony.bas,
-    props.harmony.ten,
-    props.harmony.alt,
-    props.harmony.sop,
+    props.mode === Mode.Solve ? props.harmony.ten : null,
+    props.mode === Mode.Solve ? props.harmony.alt : null,
+    props.mode === Mode.Solve ? props.harmony.sop : null,
   ].map((degree) => {
     return degree !== null ? degreeToFreq(degree) : 0;
   });
@@ -122,7 +136,7 @@ const stopChord = (immediate: boolean = false) => {
 };
 
 const handleInteractionStart = (e: MouseEvent) => {
-  if (e.buttons !== 0) {
+  if (e.buttons === 1) {
     playChord();
   }
 };
@@ -138,6 +152,16 @@ onUnmounted(() => {
     audioContext = null;
   }
 });
+
+// バス設定
+const setBass = (bass: number) => {
+  harmonies.value[props.idx].bas = bass;
+  harmonies.value[props.idx].chord = null;
+  playChord();
+};
+const setChord = (chord: Chord) => {
+  harmonies.value[props.idx].chord = chord;
+};
 </script>
 
 <template>
@@ -153,7 +177,7 @@ onUnmounted(() => {
   </text>
   <!-- ten -->
   <text
-    v-if="harmony.ten !== null"
+    v-if="harmony.ten !== null && mode === Mode.Solve"
     :x="x"
     :y="u * 3 + -2 * harmony.ten"
     class="bravura-text"
@@ -162,7 +186,7 @@ onUnmounted(() => {
   </text>
   <!-- alt -->
   <text
-    v-if="harmony.alt !== null"
+    v-if="harmony.alt !== null && mode === Mode.Solve"
     :x="x"
     :y="-u * 3 + -2 * harmony.alt"
     class="bravura-text"
@@ -171,7 +195,7 @@ onUnmounted(() => {
   </text>
   <!-- sop -->
   <text
-    v-if="harmony.sop !== null"
+    v-if="harmony.sop !== null && mode === Mode.Solve"
     :x="x"
     :y="-u * 3 + -2 * harmony.sop"
     class="bravura-text"
@@ -179,33 +203,33 @@ onUnmounted(() => {
     &#xe1d3;
   </text>
   <!-- 加線 -->
-  <text
-    v-for="(y, idx) in ledger4ys"
-    :key="idx"
-    :x="x"
-    :y="y"
-    class="bravura-text"
+  <g v-if="mode === Mode.Solve">
+    <text
+      v-for="(y, i) in ledger4ys"
+      :key="i"
+      :x="x"
+      :y="y"
+      class="bravura-text"
+      >&#xe022;</text
+    >
+    <text
+      v-for="(y, i) in ledger3ys"
+      :key="i"
+      :x="x"
+      :y="y"
+      class="bravura-text"
+      >&#xe022;</text
+    >
+  </g>
+  <text v-for="(y, i) in ledger2ys" :key="i" :x="x" :y="y" class="bravura-text"
     >&#xe022;</text
   >
-  <text
-    v-for="(y, idx) in ledger3ys"
-    :key="idx"
-    :x="x"
-    :y="y"
-    class="bravura-text"
-    >&#xe022;</text
-  >
-  <text
-    v-for="(y, idx) in ledger2ys"
-    :key="idx"
-    :x="x"
-    :y="y"
-    class="bravura-text"
-    >&#xe022;</text
-  >
-  <text :x="x" :y="staffGap / 2 + 4 * u + 5.5 * u" class="yuzuri-text">{{
-    harmony.chord !== null ? chordToYuzuri(harmony.chord) : ""
-  }}</text>
+  <!-- 和音記号 -->
+  <g v-if="harmony.chord !== null">
+    <text :x="x" :y="staffGap / 2 + 4 * u + 5.5 * u" class="yuzuri-text">{{
+      chordToYuzuri(harmony.chord)
+    }}</text>
+  </g>
   <!-- UI -->
   <rect
     :x="x - u"
@@ -219,10 +243,53 @@ onUnmounted(() => {
     @mouseenter="handleInteractionStart"
     @mouseleave="handleInteractionEnd"
   />
+  <g v-if="mode === Mode.BassEdit">
+    <g
+      v-for="(bas, i) in [-11, -10, -9, -8, -7, -6, -5, -4, -3, -2, -1, 0, 1]"
+      :key="i"
+      class="edit-bass"
+      @mousedown="
+        () => {
+          setBass(bas);
+        }
+      "
+      @mouseup="handleInteractionEnd"
+      @mouseleave="handleInteractionEnd"
+    >
+      <text :x="x" :y="u * 3 + -2 * bas" class="bravura-text"> &#xe1d4; </text>
+      <rect
+        :x="x - u"
+        :y="u * 3 - (1 / 4) * u + -2 * bas"
+        :width="4 * u"
+        :height="(1 / 2) * u"
+      />
+    </g>
+  </g>
+  <!-- 和音選択 -->
+  <g v-if="harmony.chord === null && harmony.bas !== null">
+    <text
+      v-for="(chord, i) in bassToChords(harmony.bas)"
+      :key="i"
+      :x="x"
+      :y="staffGap / 2 + 4 * u + 5.5 * u + i * 2 * u"
+      class="yuzuri-text pending-chord pointer pointable"
+      @mousedown="
+        () => {
+          setChord(chord);
+        }
+      "
+      >{{ chordToYuzuri(chord) }}</text
+    >
+  </g>
 </template>
 
 <style>
-.play-rect {
+.pointer {
+  cursor: pointer;
+}
+
+.play-rect,
+.edit-bass {
   fill: transparent;
   cursor: pointer;
   /* transition: all 0.15s ease-out; */
@@ -231,9 +298,16 @@ onUnmounted(() => {
 .play-rect:hover {
   fill: #00f2;
 }
+.edit-bass:hover text {
+  fill: #0006;
+}
 
 /* isPlayingがtrueの時にactiveクラスが付与されます */
 .play-rect.active {
   fill: #00f4;
+}
+
+.pending-chord {
+  fill: #bbb;
 }
 </style>
