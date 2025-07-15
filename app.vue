@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { harmonies } from "./components/states";
+import { harmonies, musics } from "./components/states";
 
 // Voice range
 const harmonies2 = [
@@ -32,10 +32,29 @@ const mode = ref<Mode>(Mode.BassEdit);
       <input type="radio" v-model="mode" :value="Mode.Solve" />
       実施
     </label>
-    <FullScore :harmonies="harmonies" :mode="mode" />
+    <FullScore :harmonies="harmonies" :mode="mode" :svg-scale="3" />
+    <div v-if="mode === Mode.Solve">
+      <button
+        @click="
+          () => {
+            musics = chordSolver(harmonies, Key.C);
+          }
+        "
+      >
+        solve
+      </button>
+      <div v-for="(music, idx) in musics">
+        {{ idx + 1 }} / {{ musics.length }}
+        <FullScore
+          :harmonies="music.harmonies"
+          :mode="Mode.View"
+          :svg-scale="1.5"
+        />
+      </div>
+    </div>
     <details>
       <summary>Debug</summary>
-      <FullScore :harmonies="harmonies2" :mode="mode" />
+      <FullScore :harmonies="harmonies2" :mode="mode" :svg-scale="3" />
     </details>
   </div>
 </template>

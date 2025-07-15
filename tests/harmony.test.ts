@@ -1,4 +1,4 @@
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, assert } from "vitest";
 import { Chord, bassToChords, chordBas } from "../utils/harmony";
 
 describe("bassToChord", () => {
@@ -20,6 +20,7 @@ describe("degrees", () => {
   it("bass", () => {
     for (let bas = 0; bas < 7; bas += 1) {
       const chords = bassToChords(bas);
+      assert(chords.length > 0);
       for (const chord of chords) {
         expect(chordBas(chord)).toBe(bas);
       }
