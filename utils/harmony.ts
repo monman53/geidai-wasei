@@ -1,3 +1,5 @@
+import { mod } from "./utils";
+
 export enum Chord {
   // 3和音
   // 基本位置
@@ -145,7 +147,7 @@ export const chordToYuzuri = (chord: Chord) => {
 };
 
 export const bassToChords = (bass: number): Chord[] => {
-  switch ((bass + 700) % 7) {
+  switch (mod(bass)) {
     case 0:
       return [Chord.I, Chord.IV_2];
     case 1:

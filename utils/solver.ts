@@ -1,11 +1,11 @@
 export const chordSolver = (
   harmonies: Harmony[],
   key: Key,
-  //   standard: boolean = true,
+  standard: boolean = true,
   topN: number = 100
 ): Music[] => {
   let musics: Music[] = [new Music([], 0)];
-  let prevHarmony = null;
+  let prevHarmony = undefined;
   for (const [idx, harmony] of harmonies.entries()) {
     if (harmony.chord === null) {
       break;
@@ -20,25 +20,25 @@ export const chordSolver = (
       }
       const bass = [];
       for (let bas = vRange.bas.min; bas <= vRange.bas.max; bas += 1) {
-        if ((bas + 700) % 7 === chordBas(chord)) {
+        if (mod(bas) === chordBas(chord)) {
           bass.push(bas);
         }
       }
       const tens = [];
       for (let ten = vRange.ten.min; ten <= vRange.ten.max; ten += 1) {
-        if (chordDegs.includes((ten + 700) % 7)) {
+        if (chordDegs.includes(mod(ten))) {
           tens.push(ten);
         }
       }
       const alts = [];
       for (let alt = vRange.alt.min; alt <= vRange.alt.max; alt += 1) {
-        if (chordDegs.includes((alt + 700) % 7)) {
+        if (chordDegs.includes(mod(alt))) {
           alts.push(alt);
         }
       }
       const sops = [];
       for (let sop = vRange.sop.min; sop <= vRange.sop.max; sop += 1) {
-        if (chordDegs.includes((sop + 700) % 7)) {
+        if (chordDegs.includes(mod(sop))) {
           sops.push(sop);
         }
       }
@@ -55,19 +55,17 @@ export const chordSolver = (
                 sop
               );
               // # 配置の規則
-              // if not constraint_A1(next_harmony):
-              //     continue
+              if (!constraintA1(nextHarmony)) continue;
               // if not constraint_A2(next_harmony):
               //     continue
               // if not constraint_A3(next_harmony):
               //     continue
               // if not constraint_A4(next_harmony):
               //     continue
-              // if standard:
-              //     if not standard_distribution(
-              //         idx, prev_harmony, next_harmony
-              //     ):
-              //         continue
+              if (standard) {
+                if (!standardDistribution(idx, prevHarmony, nextHarmony))
+                  continue;
+              }
               // # 曲の冒頭の和音は無条件に追加
               if (prevHarmony === null) {
                 nextMusics.push(new Music([nextHarmony], 0));
