@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, onUnmounted } from "vue";
-import { harmonies } from "./states";
+import { getAudioContext, harmonies } from "./states";
 
 const props = defineProps<{
   mode: Mode;
@@ -77,14 +77,11 @@ const ledger4ys = computed(() => {
 
 // 和音再生
 const isPlaying = ref(false);
-let audioContext: AudioContext | null = null;
 let oscillators: OscillatorNode[] = [];
 let gainNode: GainNode | null = null;
 
 const playChord = () => {
-  if (audioContext === null) {
-    audioContext = new window.AudioContext();
-  }
+  const audioContext = getAudioContext();
 
   isPlaying.value = true;
 
@@ -101,9 +98,6 @@ const playChord = () => {
     return degree !== null ? degreeToFreq(degree) : 0;
   });
   oscillators = frequencies.map((freq) => {
-    if (audioContext === null) {
-      audioContext = new window.AudioContext();
-    }
     const osc = audioContext.createOscillator();
     osc.type = "sine";
     osc.frequency.setValueAtTime(freq, audioContext.currentTime);
@@ -111,11 +105,13 @@ const playChord = () => {
     return osc;
   });
 
-  gainNode.gain.linearRampToValueAtTime(0.1, audioContext.currentTime + 0.01);
+  gainNode.gain.linearRampToValueAtTime(0.1, audioContext.currentTime + 0.02);
   oscillators.forEach((osc) => osc.start());
 };
 
 const stopChord = (immediate: boolean = false) => {
+  const audioContext = getAudioContext();
+
   if (!gainNode || !audioContext) return;
 
   isPlaying.value = false;
@@ -146,10 +142,10 @@ const handleInteractionEnd = () => {
 };
 
 onUnmounted(() => {
+  const audioContext = getAudioContext();
   if (audioContext) {
     stopChord(true); // 即時停止
     audioContext.close().catch(console.error);
-    audioContext = null;
   }
 });
 
