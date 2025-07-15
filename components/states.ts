@@ -1,3 +1,17 @@
+let audioContext: AudioContext | null = null;
+
+export const createAudioContext = () => {
+  audioContext = new window.AudioContext();
+};
+
+export const getAudioContext = () => {
+  if (audioContext === null) {
+    // createAudioContext();
+    audioContext = new window.AudioContext();
+  }
+  return audioContext;
+};
+
 // p.41
 export const harmonies = ref<Harmony[]>([
   //   new Harmony(Key.C, Chord.I, 0, 2, 4, 7),
