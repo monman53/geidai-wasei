@@ -33,16 +33,17 @@ const mode = ref<Mode>(Mode.BassEdit);
       実施
     </label>
     <FullScore :harmonies="harmonies" :mode="mode" :svg-scale="3" />
+    <button
+      @click="
+        () => {
+          mode = Mode.Solve;
+          musics = chordSolver(harmonies, Key.C);
+        }
+      "
+    >
+      solve
+    </button>
     <div v-if="mode === Mode.Solve">
-      <button
-        @click="
-          () => {
-            musics = chordSolver(harmonies, Key.C);
-          }
-        "
-      >
-        solve
-      </button>
       <div v-for="(music, idx) in musics">
         {{ idx + 1 }} / {{ musics.length }}
         <FullScore
