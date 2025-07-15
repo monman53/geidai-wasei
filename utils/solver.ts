@@ -2,7 +2,7 @@ export const chordSolver = (
   harmonies: Harmony[],
   key: Key,
   standard: boolean = true,
-  topN: number = 100
+  topN: number = 512
 ): Music[] => {
   let musics: Music[] = [new Music([], 0)];
   let prevHarmony = undefined;
@@ -18,11 +18,15 @@ export const chordSolver = (
       if (idx > 0) {
         prevHarmony = music.harmonies.at(-1);
       }
-      const bass = [];
-      for (let bas = vRange.bas.min; bas <= vRange.bas.max; bas += 1) {
-        if (mod(bas) === chordBas(chord)) {
-          bass.push(bas);
+      let bass = [];
+      if (harmony.bas === null) {
+        for (let bas = vRange.bas.min; bas <= vRange.bas.max; bas += 1) {
+          if (mod(bas) === chordBas(chord)) {
+            bass.push(bas);
+          }
         }
+      } else {
+        bass = [harmony.bas];
       }
       const tens = [];
       for (let ten = vRange.ten.min; ten <= vRange.ten.max; ten += 1) {
@@ -56,39 +60,29 @@ export const chordSolver = (
               );
               // # 配置の規則
               if (!constraintA1(nextHarmony)) continue;
-              // if not constraint_A2(next_harmony):
-              //     continue
-              // if not constraint_A3(next_harmony):
-              //     continue
-              // if not constraint_A4(next_harmony):
-              //     continue
+              if (!constraintA2(nextHarmony)) continue;
+              // if (!constraintA3(nextHarmony)) continue;
+              // if (!constraintA4(nextHarmony)) continue;
               if (standard) {
                 if (!standardDistribution(idx, prevHarmony, nextHarmony))
                   continue;
               }
               // # 曲の冒頭の和音は無条件に追加
-              if (prevHarmony === null) {
+              if (prevHarmony === undefined) {
                 nextMusics.push(new Music([nextHarmony], 0));
                 continue;
               }
               // # 連結の規則
-              // if not constraint_B1(prev_harmony, next_harmony):
-              //     continue
-              // if not constraint_B2(prev_harmony, next_harmony):
-              //     continue
-              // if not constraint_C1(prev_harmony, next_harmony):
-              //     continue
-              // if not constraint_C2(prev_harmony, next_harmony):
-              //     continue
-              // if not constraint_C3(prev_harmony, next_harmony):
-              //     continue
-              // if not constraint_C4(prev_harmony, next_harmony):
-              //     continue
-              // if not constraint_C5(prev_harmony, next_harmony):
-              //     continue
-              // if standard:
-              //     if not standard_leading(prev_harmony, next_harmony):
-              //         continue
+              if (!constraintB1(prevHarmony, nextHarmony)) continue;
+              if (!constraintB2(prevHarmony, nextHarmony)) continue;
+              if (!constraintC1(prevHarmony, nextHarmony)) continue;
+              if (!constraintC2(prevHarmony, nextHarmony)) continue;
+              if (!constraintC3(prevHarmony, nextHarmony)) continue;
+              if (!constraintC4(prevHarmony, nextHarmony)) continue;
+              // if (!constraintC5(prevHarmony, nextHarmony)) continue;
+              if (standard) {
+                if (!standardLeading(prevHarmony, nextHarmony)) continue;
+              }
               // # スコア付け
               // penalty = calc_score(prev_harmony, next_harmony)
               const penalty = 0;

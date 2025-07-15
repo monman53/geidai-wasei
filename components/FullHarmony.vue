@@ -17,18 +17,18 @@ const ledger2ys = computed(() => {
   if (
     props.harmony.bas !== null &&
     props.harmony.ten !== null &&
-    props.mode === Mode.Solve
+    props.mode !== Mode.BassEdit
   ) {
     m = Math.max(props.harmony.bas, props.harmony.ten);
   } else if (
     props.harmony.bas === null &&
     props.harmony.ten !== null &&
-    props.mode === Mode.Solve
+    props.mode !== Mode.BassEdit
   ) {
     m = props.harmony.ten;
   } else if (
     (props.harmony.ten === null && props.harmony.bas !== null) ||
-    (props.mode == Mode.BassEdit && props.harmony.bas !== null)
+    (props.mode === Mode.BassEdit && props.harmony.bas !== null)
   ) {
     m = props.harmony.bas;
   } else {
