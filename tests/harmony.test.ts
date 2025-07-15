@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { Chord, bassToChords } from "../utils/harmony";
+import { Chord, bassToChords, chordBas } from "../utils/harmony";
 
 describe("bassToChord", () => {
   it("unique", () => {
@@ -13,5 +13,16 @@ describe("bassToChord", () => {
     chords = chords.concat(bassToChords(6));
     expect(chords.length).toBe(new Set(chords).size);
     expect(chords.length).toBe(Object.keys(Chord).length / 2);
+  });
+});
+
+describe("degrees", () => {
+  it("bass", () => {
+    for (let bas = 0; bas < 7; bas += 1) {
+      const chords = bassToChords(bas);
+      for (const chord of chords) {
+        expect(chordBas(chord)).toBe(bas);
+      }
+    }
   });
 });

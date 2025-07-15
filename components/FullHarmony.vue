@@ -264,22 +264,22 @@ const setChord = (chord: Chord) => {
         :height="(1 / 2) * u"
       />
     </g>
-  </g>
-  <!-- 和音選択 -->
-  <g v-if="harmony.chord === null && harmony.bas !== null">
-    <text
-      v-for="(chord, i) in bassToChords(harmony.bas)"
-      :key="i"
-      :x="x"
-      :y="staffGap / 2 + 4 * u + 5.5 * u + i * 2 * u"
-      class="yuzuri-text pending-chord pointer pointable"
-      @mousedown="
-        () => {
-          setChord(chord);
-        }
-      "
-      >{{ chordToYuzuri(chord) }}</text
-    >
+    <!-- 和音選択 -->
+    <g v-if="harmony.chord === null && harmony.bas !== null">
+      <text
+        v-for="(chord, i) in bassToChords(harmony.bas)"
+        :key="i"
+        :x="x"
+        :y="staffGap / 2 + 4 * u + 5.5 * u + i * 2 * u"
+        class="yuzuri-text pending-chord pointer pointable"
+        @mousedown="
+          () => {
+            setChord(chord);
+          }
+        "
+        >{{ chordToYuzuri(chord) }}</text
+      >
+    </g>
   </g>
 </template>
 
