@@ -7,12 +7,13 @@ export const constraintA1 = (harmony: FixedHarmony): boolean => {
   if (!chordDegs.includes(mod(harmony.alt))) return false;
   if (!chordDegs.includes(mod(harmony.sop))) return false;
   // 第3音は必ず和音の構成音でなければならない
+  // TODO: 根音省略形は?
   if (
     ![
-      harmony.bas % 7,
-      harmony.ten % 7,
-      harmony.alt % 7,
-      harmony.sop % 7,
+      mod(harmony.bas),
+      mod(harmony.ten),
+      mod(harmony.alt),
+      mod(harmony.sop),
     ].includes(chordDegs[1])
   )
     return false;
@@ -53,46 +54,33 @@ export const constraintA1 = (harmony: FixedHarmony): boolean => {
 //         # TODO: 予備の例外
 //     return True
 
-// def constraint_B1(prev: Harmony, next: Harmony) -> bool:
-//     # Sec. 12: 進行に関する制限
-//     # (1) 長短7度の進行は制限される
-//     if abs(next.bas - prev.bas) == 6:
-//         return False
-//     if abs(next.ten - prev.ten) == 6:
-//         return False
-//     if abs(next.alt - prev.alt) == 6:
-//         return False
-//     if abs(next.sop - prev.sop) == 6:
-//         return False
-//     # (2) 増音程の...
-//     # NOTE: C において増音程はF-Hの増4度のみ?
-//     if next.bas % 7 == 3 and prev.bas % 7 == 6:
-//         return False
-//     if next.ten % 7 == 3 and prev.ten % 7 == 6:
-//         return False
-//     if next.alt % 7 == 3 and prev.alt % 7 == 6:
-//         return False
-//     if next.sop % 7 == 3 and prev.sop % 7 == 6:
-//         return False
-//     if next.bas % 7 == 6 and prev.bas % 7 == 3:
-//         return False
-//     if next.ten % 7 == 6 and prev.ten % 7 == 3:
-//         return False
-//     if next.alt % 7 == 6 and prev.alt % 7 == 3:
-//         return False
-//     if next.sop % 7 == 6 and prev.sop % 7 == 3:
-//         return False
-//     # (3) 複音程（9度以上の音程）の...
-//     if abs(next.bas - prev.bas) > 7:
-//         return False
-//     if abs(next.ten - prev.ten) > 7:
-//         return False
-//     if abs(next.alt - prev.alt) > 7:
-//         return False
-//     if abs(next.sop - prev.sop) > 7:
-//         return False
-
-//     return True
+export const constraintB1 = (
+  prev: FixedHarmony,
+  next: FixedHarmony
+): boolean => {
+  // Sec. 12: 進行に関する制限
+  // (1) 長短7度の進行は制限される
+  if (Math.abs(next.bas - prev.bas) == 6) return false;
+  if (Math.abs(next.ten - prev.ten) == 6) return false;
+  if (Math.abs(next.alt - prev.alt) == 6) return false;
+  if (Math.abs(next.sop - prev.sop) == 6) return false;
+  // (2) 増音程の...
+  // NOTE: C において増音程はF-Hの増4度のみ?
+  if (mod(next.bas) == 3 && mod(prev.bas) == 6) return false;
+  if (mod(next.ten) == 3 && mod(prev.ten) == 6) return false;
+  if (mod(next.alt) == 3 && mod(prev.alt) == 6) return false;
+  if (mod(next.sop) == 3 && mod(prev.sop) == 6) return false;
+  if (mod(next.bas) == 6 && mod(prev.bas) == 3) return false;
+  if (mod(next.ten) == 6 && mod(prev.ten) == 3) return false;
+  if (mod(next.alt) == 6 && mod(prev.alt) == 3) return false;
+  if (mod(next.sop) == 6 && mod(prev.sop) == 3) return false;
+  // (3) 複音程（9度以上の音程）の...
+  if (Math.abs(next.bas - prev.bas) > 7) return false;
+  if (Math.abs(next.ten - prev.ten) > 7) return false;
+  if (Math.abs(next.alt - prev.alt) > 7) return false;
+  if (Math.abs(next.sop - prev.sop) > 7) return false;
+  return true;
+};
 
 // def constraint_B2(prev: Harmony, next: Harmony):
 //     if prev.chord in Vs:
@@ -129,27 +117,50 @@ export const constraintA1 = (harmony: FixedHarmony): boolean => {
 //         # TODO: 付則2
 //     return True
 
-// def constraint_C1(prev: Harmony, next: Harmony) -> bool:
-//     # Sec. 14: 同時進行に関する禁則
-//     # (1) 連続8度・連続1度
-//     pairs = [
-//         ((prev.bas, prev.ten), (next.bas, next.ten)),
-//         ((prev.bas, prev.alt), (next.bas, next.alt)),
-//         ((prev.bas, prev.sop), (next.bas, next.sop)),
-//         ((prev.ten, prev.alt), (next.ten, next.alt)),
-//         ((prev.ten, prev.sop), (next.ten, next.sop)),
-//         ((prev.alt, prev.sop), (next.alt, next.sop)),
-//     ]
-//     for pair in pairs:
-//         prev_voices, next_voices = pair
-//         # (1) 連続8度・連続1度
-//         if (
-//             prev_voices[0] % 7 == prev_voices[1] % 7
-//             and next_voices[0] % 7 == next_voices[1] % 7
-//         ):
-//             return False
+export const constraintC1 = (
+  prev: FixedHarmony,
+  next: FixedHarmony
+): boolean => {
+  // Sec. 14: 同時進行に関する禁則
+  // (1) 連続8度・連続1度
+  const pairs = [
+    [
+      [prev.bas, prev.ten],
+      [next.bas, next.ten],
+    ],
+    [
+      [prev.bas, prev.alt],
+      [next.bas, next.alt],
+    ],
+    [
+      [prev.bas, prev.sop],
+      [next.bas, next.sop],
+    ],
+    [
+      [prev.ten, prev.alt],
+      [next.ten, next.alt],
+    ],
+    [
+      [prev.ten, prev.sop],
+      [next.ten, next.sop],
+    ],
+    [
+      [prev.alt, prev.sop],
+      [next.alt, next.sop],
+    ],
+  ];
+  for (const pair of pairs) {
+    const [prevVoices, nextVoices] = pair;
+    // (1) 連続8度・連続1度
+    if (
+      mod(prevVoices[0]) == mod(prevVoices[1]) &&
+      mod(nextVoices[0]) == mod(nextVoices[1])
+    )
+      return false;
+  }
 
-//     return True
+  return true;
+};
 
 // def constraint_C2(prev: Harmony, next: Harmony) -> bool:
 //     # Sec. 14: 同時進行に関する禁則
