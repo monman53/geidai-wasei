@@ -142,11 +142,7 @@ const handleInteractionEnd = () => {
 };
 
 onUnmounted(() => {
-  const audioContext = getAudioContext();
-  if (audioContext) {
-    stopChord(true); // 即時停止
-    audioContext.close().catch(console.error);
-  }
+  stopChord(true); // 即時停止
 });
 
 // バス設定

@@ -1,12 +1,7 @@
 let audioContext: AudioContext | null = null;
 
-export const createAudioContext = () => {
-  audioContext = new window.AudioContext();
-};
-
 export const getAudioContext = () => {
   if (audioContext === null) {
-    // createAudioContext();
     audioContext = new window.AudioContext();
   }
   return audioContext;
