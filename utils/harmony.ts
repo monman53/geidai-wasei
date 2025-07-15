@@ -166,6 +166,7 @@ export const chordDegrees = (chord: Chord): number[] => {
     case Chord.V7_2:
     case Chord.V7_3:
       return [4, 6, 1, 3];
+    case Chord.V7_:
     case Chord.V7_2_:
       return [6, 1, 3];
     case Chord.V9:
@@ -209,15 +210,16 @@ export const chordBas = (chord: Chord): number => {
     case Chord.V7_3:
       return chord_deg[3];
     // 第1転回位置（根音省略）
+    case Chord.V7_:
+      return chord_deg[0];
     case Chord.V7_2_:
       return chord_deg[1];
-    // TODO: Check
     case Chord.V9_1_:
-      return chord_deg[1];
+      return chord_deg[0];
     case Chord.V9_2_:
-      return chord_deg[2];
+      return chord_deg[1];
     case Chord.V9_3_:
-      return chord_deg[3];
+      return chord_deg[2];
     default:
       console.error("Not implemented: ", chord);
       return -1;
