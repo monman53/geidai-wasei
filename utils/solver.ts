@@ -60,12 +60,9 @@ export const chordSolver = (
               );
               // # 配置の規則
               if (!constraintA1(nextHarmony)) continue;
-              // if not constraint_A2(next_harmony):
-              //     continue
-              // if not constraint_A3(next_harmony):
-              //     continue
-              // if not constraint_A4(next_harmony):
-              //     continue
+              // if (!constraintA2(nextHarmony)) continue;
+              // if (!constraintA3(nextHarmony)) continue;
+              // if (!constraintA4(nextHarmony)) continue;
               if (standard) {
                 if (!standardDistribution(idx, prevHarmony, nextHarmony))
                   continue;
@@ -77,17 +74,12 @@ export const chordSolver = (
               }
               // # 連結の規則
               if (!constraintB1(prevHarmony, nextHarmony)) continue;
-              // if not constraint_B2(prev_harmony, next_harmony):
-              //     continue
+              if (!constraintB2(prevHarmony, nextHarmony)) continue;
               if (!constraintC1(prevHarmony, nextHarmony)) continue;
-              // if not constraint_C2(prev_harmony, next_harmony):
-              //     continue
-              // if not constraint_C3(prev_harmony, next_harmony):
-              //     continue
-              // if not constraint_C4(prev_harmony, next_harmony):
-              //     continue
-              // if not constraint_C5(prev_harmony, next_harmony):
-              //     continue
+              if (!constraintC2(prevHarmony, nextHarmony)) continue;
+              if (!constraintC3(prevHarmony, nextHarmony)) continue;
+              if (!constraintC4(prevHarmony, nextHarmony)) continue;
+              // if (!constraintC5(prevHarmony, nextHarmony)) continue;
               if (standard) {
                 if (!standardLeading(prevHarmony, nextHarmony)) continue;
               }

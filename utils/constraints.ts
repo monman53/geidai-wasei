@@ -82,40 +82,81 @@ export const constraintB1 = (
   return true;
 };
 
-// def constraint_B2(prev: Harmony, next: Harmony):
-//     if prev.chord in Vs:
-//         # Sec 42:
-//         # 限定進行音
-//         # IV -> III (2度下行)
-//         if prev.bas % 7 == 3 and not (next.bas == prev.bas - 1 or next.bas == prev.bas):
-//             return False
-//         if prev.ten % 7 == 3 and not (next.ten == prev.ten - 1 or next.ten == prev.ten):
-//             return False
-//         if prev.alt % 7 == 3 and not (next.alt == prev.alt - 1 or next.alt == prev.alt):
-//             return False
-//         if prev.sop % 7 == 3 and not (next.sop == prev.sop - 1 or next.sop == prev.sop):
-//             return False
-//         # VII -> I (2度上行)
-//         if prev.bas % 7 == 6 and not (next.bas == prev.bas + 1 or next.bas == prev.bas):
-//             return False
-//         if prev.ten % 7 == 6 and not (next.ten == prev.ten + 1 or next.ten == prev.ten):
-//             return False
-//         if prev.alt % 7 == 6 and not (next.alt == prev.alt + 1 or next.alt == prev.alt):
-//             return False
-//         if prev.sop % 7 == 6 and not (next.sop == prev.sop + 1 or next.sop == prev.sop):
-//             return False
-//         # VI -> V (V9 9音 2度下行)
-//         if prev.bas % 7 == 5 and not (next.bas == prev.bas - 1 or next.bas == prev.bas):
-//             return False
-//         if prev.ten % 7 == 5 and not (next.ten == prev.ten - 1 or next.ten == prev.ten):
-//             return False
-//         if prev.alt % 7 == 5 and not (next.alt == prev.alt - 1 or next.alt == prev.alt):
-//             return False
-//         if prev.sop % 7 == 5 and not (next.sop == prev.sop - 1 or next.sop == prev.sop):
-//             return False
-//         # TODO: 付則1
-//         # TODO: 付則2
-//     return True
+export const constraintB2 = (
+  prev: FixedHarmony,
+  next: FixedHarmony
+): boolean => {
+  if (Vs.includes(prev.chord)) {
+    // Sec 42:
+    // 限定進行音
+    // IV -> III (2度下行)
+    if (
+      mod(prev.bas) === 3 &&
+      !(next.bas === prev.bas - 1 || next.bas === prev.bas)
+    )
+      return false;
+    if (
+      mod(prev.ten) === 3 &&
+      !(next.ten === prev.ten - 1 || next.ten === prev.ten)
+    )
+      return false;
+    if (
+      mod(prev.alt) === 3 &&
+      !(next.alt === prev.alt - 1 || next.alt === prev.alt)
+    )
+      return false;
+    if (
+      mod(prev.sop) === 3 &&
+      !(next.sop === prev.sop - 1 || next.sop === prev.sop)
+    )
+      return false;
+    // VII -> I (2度上行)
+    if (
+      mod(prev.bas) === 6 &&
+      !(next.bas === prev.bas + 1 || next.bas === prev.bas)
+    )
+      return false;
+    if (
+      mod(prev.ten) === 6 &&
+      !(next.ten === prev.ten + 1 || next.ten === prev.ten)
+    )
+      return false;
+    if (
+      mod(prev.alt) === 6 &&
+      !(next.alt === prev.alt + 1 || next.alt === prev.alt)
+    )
+      return false;
+    if (
+      mod(prev.sop) === 6 &&
+      !(next.sop === prev.sop + 1 || next.sop === prev.sop)
+    )
+      return false;
+    // VI -> V (V9 9音 2度下行)
+    if (
+      mod(prev.bas) === 5 &&
+      !(next.bas === prev.bas - 1 || next.bas === prev.bas)
+    )
+      return false;
+    if (
+      mod(prev.ten) === 5 &&
+      !(next.ten === prev.ten - 1 || next.ten === prev.ten)
+    )
+      return false;
+    if (
+      mod(prev.alt) === 5 &&
+      !(next.alt === prev.alt - 1 || next.alt === prev.alt)
+    )
+      return false;
+    if (
+      mod(prev.sop) === 5 &&
+      !(next.sop === prev.sop - 1 || next.sop === prev.sop)
+    )
+      return false;
+    // TODO: 付則1
+    // TODO: 付則2
+  }
+  return true;
+};
 
 export const constraintC1 = (
   prev: FixedHarmony,
@@ -162,89 +203,137 @@ export const constraintC1 = (
   return true;
 };
 
-// def constraint_C2(prev: Harmony, next: Harmony) -> bool:
-//     # Sec. 14: 同時進行に関する禁則
-//     # (2) 連続5度
-//     pairs = [
-//         ((prev.bas, prev.ten), (next.bas, next.ten)),
-//         ((prev.bas, prev.alt), (next.bas, next.alt)),
-//         ((prev.bas, prev.sop), (next.bas, next.sop)),
-//         ((prev.ten, prev.alt), (next.ten, next.alt)),
-//         ((prev.ten, prev.sop), (next.ten, next.sop)),
-//         ((prev.alt, prev.sop), (next.alt, next.sop)),
-//     ]
-//     for pair in pairs:
-//         prev_voices, next_voices = pair
-//         if (
-//             abs(prev_voices[0] - prev_voices[1]) % 7 == 4
-//             and abs(next_voices[0] - next_voices[1]) % 7 == 4
-//         ):
-//             # 後続音程が F-H(in C) の減5度の場合は除外
-//             # TODO: C2付則
-//             if (next_voices[0] % 7 == 3 and next_voices[1] % 7 == 6) or (
-//                 next_voices[0] % 7 == 6 and next_voices[1] % 7 == 3
-//             ):
-//                 pass
-//             else:
-//                 return False
+export const constraintC2 = (
+  prev: FixedHarmony,
+  next: FixedHarmony
+): boolean => {
+  // Sec. 14: 同時進行に関する禁則
+  // (2) 連続5度
+  const pairs = [
+    [
+      [prev.bas, prev.ten],
+      [next.bas, next.ten],
+    ],
+    [
+      [prev.bas, prev.alt],
+      [next.bas, next.alt],
+    ],
+    [
+      [prev.bas, prev.sop],
+      [next.bas, next.sop],
+    ],
+    [
+      [prev.ten, prev.alt],
+      [next.ten, next.alt],
+    ],
+    [
+      [prev.ten, prev.sop],
+      [next.ten, next.sop],
+    ],
+    [
+      [prev.alt, prev.sop],
+      [next.alt, next.sop],
+    ],
+  ];
+  for (const pair of pairs) {
+    const [prevVoices, nextVoices] = pair;
+    if (
+      mod(Math.abs(prevVoices[0] - prevVoices[1])) === 4 &&
+      mod(Math.abs(nextVoices[0] - nextVoices[1])) === 4
+    ) {
+      // 後続音程が F-H(in C) の減5度の場合は除外
+      // TODO: C2付則
+      if (
+        !(mod(nextVoices[0]) === 3 && mod(nextVoices[1]) === 6) ||
+        (mod(nextVoices[0]) === 6 && mod(nextVoices[1]) === 3)
+      )
+        return false;
+    }
+  }
+  return true;
+};
 
-//     return True
+export const constraintC3 = (
+  prev: FixedHarmony,
+  next: FixedHarmony
+): boolean => {
+  // Sec. 14: 同時進行に関する禁則
+  // (3) 並達8度・並達5度
+  if ((next.bas - prev.bas) * (next.sop - prev.sop) > 0) {
+    // 進行が並行
+    // 並達8度
+    if (mod(next.bas) == mod(next.sop)) {
+      // sop が順次進行する場合は除外
+      if (Math.abs(next.sop - prev.sop) !== 1) return false;
+    }
+    // 並達5度
+    if (mod(Math.abs(next.bas - next.sop)) == 4) {
+      // sop が順次進行する場合と減5度の場合は除外
+      if (
+        !(
+          Math.abs(next.sop - prev.sop) === 1 ||
+          (mod(next.bas) === 3 && mod(next.sop) === 6) ||
+          (mod(next.bas) === 6 && mod(next.sop) === 3)
+        )
+      )
+        return false;
+    }
+  }
 
-// def constraint_C3(prev: Harmony, next: Harmony) -> bool:
-//     # Sec. 14: 同時進行に関する禁則
-//     # (3) 並達8度・並達5度
-//     # 並達8度
-//     if (next.bas - prev.bas) * (next.sop - prev.sop) > 0:  # 進行が並行
-//         if next.bas % 7 == next.sop % 7:
-//             # sop が順次進行する場合は除外
-//             if abs(next.sop - prev.sop) == 1:
-//                 pass
-//             else:
-//                 return False
-//     # 並達5度
-//     if (next.bas - prev.bas) * (next.sop - prev.sop) > 0:  # 進行が並行
-//         if abs(next.bas - next.sop) % 7 == 4:
-//             # sop が順次進行する場合と減5度の場合は除外
-//             if (
-//                 abs(next.sop - prev.sop) == 1
-//                 or (next.bas % 7 == 3 and next.sop % 7 == 6)
-//                 or (next.bas % 7 == 6 and next.sop % 7 == 3)
-//             ):
-//                 pass
-//             else:
-//                 return False
+  return true;
+};
 
-//     return True
-
-// def constraint_C4(prev: Harmony, next: Harmony) -> bool:
-//     # Sec. 14: 同時進行に関する禁則
-//     # (3) 並達1度
-//     if prev.chord == Chord.V and next.chord == Chord.I:
-//         if (
-//             prev.ten % 7 == 6
-//             and next.ten % 7 == 0
-//             and next.ten - prev.ten == 1
-//             and next.bas - prev.bas == 3
-//         ):
-//             # 付則
-//             return True
-//     pairs = [
-//         ((prev.bas, prev.ten), (next.bas, next.ten)),
-//         ((prev.bas, prev.alt), (next.bas, next.alt)),
-//         ((prev.bas, prev.sop), (next.bas, next.sop)),
-//         ((prev.ten, prev.alt), (next.ten, next.alt)),
-//         ((prev.ten, prev.sop), (next.ten, next.sop)),
-//         ((prev.alt, prev.sop), (next.alt, next.sop)),
-//     ]
-//     for pair in pairs:
-//         prev_voices, next_voices = pair
-//         if (prev_voices[0] - next_voices[0]) * (
-//             prev_voices[1] - next_voices[1]
-//         ) > 0:  # 進行が並行
-//             if next_voices[0] == next_voices[1]:
-//                 return False
-
-//     return True
+export const constraintC4 = (
+  prev: FixedHarmony,
+  next: FixedHarmony
+): boolean => {
+  // Sec. 14: 同時進行に関する禁則
+  // (3) 並達1度
+  if (prev.chord === Chord.V && next.chord === Chord.I) {
+    if (
+      mod(prev.ten) === 6 &&
+      mod(next.ten) === 0 &&
+      next.ten - prev.ten === 1 &&
+      next.bas - prev.bas === 3
+    )
+      // # 付則
+      return true;
+  }
+  const pairs = [
+    [
+      [prev.bas, prev.ten],
+      [next.bas, next.ten],
+    ],
+    [
+      [prev.bas, prev.alt],
+      [next.bas, next.alt],
+    ],
+    [
+      [prev.bas, prev.sop],
+      [next.bas, next.sop],
+    ],
+    [
+      [prev.ten, prev.alt],
+      [next.ten, next.alt],
+    ],
+    [
+      [prev.ten, prev.sop],
+      [next.ten, next.sop],
+    ],
+    [
+      [prev.alt, prev.sop],
+      [next.alt, next.sop],
+    ],
+  ];
+  for (const pair of pairs) {
+    const [prevVoices, nextVoices] = pair;
+    if ((prevVoices[0] - nextVoices[0]) * (prevVoices[1] - nextVoices[1]) > 0)
+      if (nextVoices[0] == nextVoices[1])
+        // 進行が並行
+        return false;
+  }
+  return true;
+};
 
 // def constraint_C5(prev: Harmony, next: Harmony) -> bool:
 //     if prev.chord in V7s + V9s:
