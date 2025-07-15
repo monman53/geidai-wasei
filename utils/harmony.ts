@@ -63,12 +63,34 @@ export enum Key {
 export class Harmony {
   constructor(
     public key: Key,
-    public chord: Chord | null,
-    public bas: number | null,
-    public ten: number | null,
-    public alt: number | null,
-    public sop: number | null
+    public chord: Chord | null = null,
+    public bas: number | null = null,
+    public ten: number | null = null,
+    public alt: number | null = null,
+    public sop: number | null = null
   ) {}
+}
+
+export class FixedHarmony {
+  constructor(
+    public key: Key,
+    public chord: Chord,
+    public bas: number,
+    public ten: number,
+    public alt: number,
+    public sop: number
+  ) {}
+
+  getHarmony = () => {
+    return new Harmony(
+      this.key,
+      this.chord,
+      this.bas,
+      this.ten,
+      this.alt,
+      this.sop
+    );
+  };
 }
 
 export const chordToYuzuri = (chord: Chord) => {
@@ -227,7 +249,7 @@ export const chordBas = (chord: Chord): number => {
 };
 
 export class Music {
-  constructor(public harmonies: Harmony[], public penalty: number) {}
+  constructor(public harmonies: FixedHarmony[], public penalty: number) {}
 }
 
 export const voiceRange = (key: Key) => {

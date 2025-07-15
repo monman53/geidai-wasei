@@ -1,7 +1,11 @@
 <script setup lang="ts">
 import bravuraMetadata from "@/assets/bravura_metadata.json";
 
-const props = defineProps<{ harmonies: Harmony[]; mode: Mode }>();
+const props = defineProps<{
+  harmonies: Harmony[] | FixedHarmony[];
+  mode: Mode;
+  svgScale: number;
+}>();
 const u = 4;
 const width = computed(() => {
   return 6 * u + 4 * u * props.harmonies.length;
@@ -11,18 +15,23 @@ const vMargin = 2 * u;
 const vMinX = computed(() => -vMargin);
 const vMinY = computed(() => -12 * u - vMargin);
 const vWidth = computed(() => width.value + 2 * vMargin);
-const vHeight = computed(() => 24 * u + 2 * u + 2 * vMargin + 5 * 2 * u);
+const vHeight = computed(
+  () =>
+    24 * u +
+    2 * u +
+    2 * vMargin +
+    (props.mode === Mode.BassEdit ? 5 * 2 * u : 0)
+);
 
 const viewBox = computed(() => {
   return `${vMinX.value} ${vMinY.value} ${vWidth.value} ${vHeight.value}`;
 });
 
-const svgScale = 3;
 const svgWidth = computed(() => {
-  return svgScale * vWidth.value;
+  return props.svgScale * vWidth.value;
 });
 const svgHeight = computed(() => {
-  return svgScale * vHeight.value;
+  return props.svgScale * vHeight.value;
 });
 </script>
 
