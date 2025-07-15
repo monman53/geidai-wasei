@@ -79,6 +79,7 @@ const ledger4ys = computed(() => {
 const isPlaying = ref(false);
 let oscillators: OscillatorNode[] = [];
 let gainNode: GainNode | null = null;
+const freqN = 4;
 
 const playChord = () => {
   const audioContext = getAudioContext();
@@ -97,15 +98,21 @@ const playChord = () => {
   ].map((degree) => {
     return degree !== null ? degreeToFreq(degree) : 0;
   });
-  oscillators = frequencies.map((freq) => {
-    const osc = audioContext.createOscillator();
-    osc.type = "sine";
-    osc.frequency.setValueAtTime(freq, audioContext.currentTime);
-    osc.connect(gainNode!);
-    return osc;
-  });
-
-  gainNode.gain.linearRampToValueAtTime(0.1, audioContext.currentTime + 0.02);
+  oscillators = [];
+  for (const freq of frequencies) {
+    // 倍音
+    for (let n = 1; n <= freqN; n += 1) {
+      const osc = audioContext.createOscillator();
+      osc.type = "sine";
+      osc.frequency.setValueAtTime(freq * n, audioContext.currentTime);
+      osc.connect(gainNode!);
+      oscillators.push(osc);
+    }
+  }
+  gainNode.gain.linearRampToValueAtTime(
+    0.1 / freqN,
+    audioContext.currentTime + 0.02
+  );
   oscillators.forEach((osc) => osc.start());
 };
 
