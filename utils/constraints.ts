@@ -337,33 +337,60 @@ export const constraintC4 = (
   return true;
 };
 
-// def constraint_C5(prev: Harmony, next: Harmony) -> bool:
-//     if prev.chord in V7s + V9s:
-//         pairs = [
-//             ((prev.bas, prev.ten), (next.bas, next.ten)),
-//             ((prev.bas, prev.alt), (next.bas, next.alt)),
-//             ((prev.bas, prev.sop), (next.bas, next.sop)),
-//             ((prev.ten, prev.alt), (next.ten, next.alt)),
-//             ((prev.ten, prev.sop), (next.ten, next.sop)),
-//             ((prev.alt, prev.sop), (next.alt, next.sop)),
-//         ]
-//         for pair in pairs:
-//             prev_voices, next_voices = pair
-//             if (prev_voices[0] - next_voices[0]) * (
-//                 prev_voices[1] - next_voices[1]
-//             ) > 0:  # 進行が並行
-//                 if (
-//                     prev_voices[0] % 7 == 3
-//                     and prev_voices[0] - next_voices[0] == 1
-//                     and prev_voices[1] % 7 == 4
-//                     and prev_voices[1] - next_voices[1] == 2
-//                 ):
-//                     return False
-//                 if (
-//                     prev_voices[1] % 7 == 3
-//                     and prev_voices[1] - next_voices[1] == 1
-//                     and prev_voices[0] % 7 == 4
-//                     and prev_voices[0] - next_voices[0] == 2
-//                 ):
-//                     return False
-//     return True
+export const constraintC5 = (
+  prev: FixedHarmony,
+  next: FixedHarmony
+): boolean => {
+  if (V7s.concat(V9s).includes(prev.chord)) {
+    const pairs = [
+      [
+        [prev.bas, prev.ten],
+        [next.bas, next.ten],
+      ],
+      [
+        [prev.bas, prev.alt],
+        [next.bas, next.alt],
+      ],
+      [
+        [prev.bas, prev.sop],
+        [next.bas, next.sop],
+      ],
+      [
+        [prev.ten, prev.alt],
+        [next.ten, next.alt],
+      ],
+      [
+        [prev.ten, prev.sop],
+        [next.ten, next.sop],
+      ],
+      [
+        [prev.alt, prev.sop],
+        [next.alt, next.sop],
+      ],
+    ];
+    for (const pair of pairs) {
+      const [prevVoices, nextVoices] = pair;
+      if (
+        (prevVoices[0] - nextVoices[0]) * (prevVoices[1] - nextVoices[1]) >
+        0
+      ) {
+        // 進行が並行
+        if (
+          mod(prevVoices[0]) == 3 &&
+          prevVoices[0] - nextVoices[0] == 1 &&
+          mod(prevVoices[1]) == 4 &&
+          prevVoices[1] - nextVoices[1] == 2
+        )
+          return false;
+        if (
+          mod(prevVoices[1]) == 3 &&
+          prevVoices[1] - nextVoices[1] == 1 &&
+          mod(prevVoices[0]) == 4 &&
+          prevVoices[0] - nextVoices[0] == 2
+        )
+          return false;
+      }
+    }
+  }
+  return true;
+};

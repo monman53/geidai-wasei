@@ -2,7 +2,7 @@ export const chordSolver = (
   harmonies: Harmony[],
   key: Key,
   standard: boolean = true,
-  topN: number = 512
+  topN: number = 1 << 12
 ): Music[] => {
   let musics: Music[] = [new Music([], 0)];
   let prevHarmony = undefined;
@@ -79,7 +79,7 @@ export const chordSolver = (
               if (!constraintC2(prevHarmony, nextHarmony)) continue;
               if (!constraintC3(prevHarmony, nextHarmony)) continue;
               if (!constraintC4(prevHarmony, nextHarmony)) continue;
-              // if (!constraintC5(prevHarmony, nextHarmony)) continue;
+              if (!constraintC5(prevHarmony, nextHarmony)) continue;
               if (standard) {
                 if (!standardLeading(prevHarmony, nextHarmony)) continue;
               }
