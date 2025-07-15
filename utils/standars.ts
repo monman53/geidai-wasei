@@ -127,6 +127,7 @@ export const standardLeading = (
     // Sec. 17: II->V の連結
     // II は保留せず VII に下行させる
     if (mod(prev.ten) == 1 && mod(next.ten) != 6) return false;
+    // TODO:
     // elif len(chord_degrees(prev.chord)) == 3 and len(chord_degrees(next.chord)) == 3:
     // elif len(chord_degrees(prev.chord)) == 3 or len(chord_degrees(next.chord)) == 3:
   } else {

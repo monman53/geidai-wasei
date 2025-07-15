@@ -60,7 +60,7 @@ export const chordSolver = (
               );
               // # 配置の規則
               if (!constraintA1(nextHarmony)) continue;
-              // if (!constraintA2(nextHarmony)) continue;
+              if (!constraintA2(nextHarmony)) continue;
               // if (!constraintA3(nextHarmony)) continue;
               // if (!constraintA4(nextHarmony)) continue;
               if (standard) {

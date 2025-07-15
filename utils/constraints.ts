@@ -20,18 +20,20 @@ export const constraintA1 = (harmony: FixedHarmony): boolean => {
   return true;
 };
 
-// def constraint_A2(harmony: Harmony) -> bool:
-//     # 限定進行音重複
-//     if harmony.chord in Vs:
-//         if [harmony.bas % 7, harmony.ten % 7, harmony.alt % 7, harmony.sop % 7].count(
-//             6
-//         ) > 1:
-//             return False
-//         if [harmony.bas % 7, harmony.ten % 7, harmony.alt % 7, harmony.sop % 7].count(
-//             3
-//         ) > 1 and harmony.chord != Chord.V7_2_:
-//             return False
-//     return True
+export const constraintA2 = (harmony: FixedHarmony): boolean => {
+  // 限定進行音重複
+  if (Vs.includes(harmony.chord)) {
+    const voices = [
+      mod(harmony.bas),
+      mod(harmony.ten),
+      mod(harmony.alt),
+      mod(harmony.sop),
+    ];
+    if (count(voices, 6) > 1) return false;
+    if (count(voices, 3) > 1 && harmony.chord !== Chord.V7_2_) return false;
+  }
+  return true;
+};
 
 // def constraint_A3(harmony: Harmony) -> bool:
 //     if harmony.chord in V9s:
