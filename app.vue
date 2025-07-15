@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { harmonies, musics } from "./components/states";
+import { getAudioContext, harmonies, musics } from "./components/states";
 
 // Voice range
 const harmonies2 = [
@@ -19,6 +19,13 @@ const harmonies2 = [
 ];
 
 const mode = ref<Mode>(Mode.BassEdit);
+
+onUnmounted(() => {
+  const audioContext = getAudioContext();
+  if (audioContext) {
+    audioContext.close().catch(console.error);
+  }
+});
 </script>
 
 <template>
