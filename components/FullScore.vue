@@ -44,9 +44,13 @@ const isDraggingHandler = new IsDraggingHandler();
       :width="svgWidth"
       :height="svgHeight"
       :view-box.camel="viewBox"
+      @pointerleave="
+        () => {
+          isDraggingHandler.stopDragging();
+        }
+      "
       @pointerup="
         () => {
-          console.log('pointer-up');
           isDraggingHandler.stopDragging();
         }
       "

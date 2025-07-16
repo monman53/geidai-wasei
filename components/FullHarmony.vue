@@ -140,7 +140,6 @@ const stopChord = (immediate: boolean = false) => {
 };
 
 const handleInteractionDown = (e: PointerEvent) => {
-  e.preventDefault();
   const targetKey = e.currentTarget as HTMLElement;
   if (targetKey.hasPointerCapture(e.pointerId)) {
     targetKey.releasePointerCapture(e.pointerId);
@@ -247,13 +246,10 @@ const setChord = (chord: Chord) => {
     :height="staffGap + 2 * 8 * u + 3 * u"
     class="play-rect"
     :class="{ active: isPlaying }"
-    @contextmenu="
-      (e) => {
-        e.preventDefault();
-      }
-    "
-    @pointerdown="handleInteractionDown"
+    @contextmenu.prevent
+    @pointerdown.prevent="handleInteractionDown"
     @pointerenter="handleInteractionEnter"
+    @pointerout="handleInteractionEnd"
     @pointerleave="handleInteractionEnd"
     @pointerup="handleInteractionEnd"
   />
@@ -307,6 +303,10 @@ const setChord = (chord: Chord) => {
   fill: transparent;
   cursor: pointer;
   touch-action: none;
+  -webkit-user-select: none; /* Safari */
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* IE/Edge */
+  user-select: none; /* Standard */
   /* touch-action: manipulation; */
   /* transition: all 0.15s ease-out; */
 }
