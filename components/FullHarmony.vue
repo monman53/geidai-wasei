@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onUnmounted } from "vue";
+import { onUnmounted } from "vue";
 import { getAudioContext, harmonies } from "./states";
 
 const props = defineProps<{
@@ -9,6 +9,7 @@ const props = defineProps<{
   staffGap: number;
   harmony: Harmony;
   x: number;
+  isDraggingHandler: IsDraggingHandler;
 }>();
 
 // 加線の座標を算出
@@ -84,6 +85,7 @@ const freqN = 4;
 const playChord = () => {
   const audioContext = getAudioContext();
 
+  props.isDraggingHandler.startDragging();
   isPlaying.value = true;
 
   gainNode = audioContext.createGain();
@@ -118,10 +120,9 @@ const playChord = () => {
 
 const stopChord = (immediate: boolean = false) => {
   const audioContext = getAudioContext();
+  isPlaying.value = false;
 
   if (!gainNode || !audioContext) return;
-
-  isPlaying.value = false;
 
   if (immediate) {
     // 即時停止
@@ -138,8 +139,17 @@ const stopChord = (immediate: boolean = false) => {
   gainNode = null;
 };
 
-const handleInteractionStart = (e: MouseEvent) => {
-  if (e.buttons === 1) {
+const handleInteractionDown = (e: PointerEvent) => {
+  e.preventDefault();
+  const targetKey = e.currentTarget as HTMLElement;
+  if (targetKey.hasPointerCapture(e.pointerId)) {
+    targetKey.releasePointerCapture(e.pointerId);
+  }
+  playChord();
+};
+
+const handleInteractionEnter = () => {
+  if (props.isDraggingHandler.isDragging) {
     playChord();
   }
 };
@@ -237,10 +247,15 @@ const setChord = (chord: Chord) => {
     :height="staffGap + 2 * 8 * u + 3 * u"
     class="play-rect"
     :class="{ active: isPlaying }"
-    @mousedown="handleInteractionStart"
-    @mouseup="handleInteractionEnd"
-    @mouseenter="handleInteractionStart"
-    @mouseleave="handleInteractionEnd"
+    @contextmenu="
+      (e) => {
+        e.preventDefault();
+      }
+    "
+    @pointerdown="handleInteractionDown"
+    @pointerenter="handleInteractionEnter"
+    @pointerleave="handleInteractionEnd"
+    @pointerup="handleInteractionEnd"
   />
   <g v-if="mode === Mode.BassEdit">
     <g
@@ -291,6 +306,8 @@ const setChord = (chord: Chord) => {
 .edit-bass {
   fill: transparent;
   cursor: pointer;
+  touch-action: none;
+  /* touch-action: manipulation; */
   /* transition: all 0.15s ease-out; */
 }
 
