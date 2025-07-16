@@ -22,7 +22,7 @@ const vHeight = computed(
     24 * u +
     2 * u +
     2 * vMargin +
-    (props.mode === Mode.BassEdit ? 5 * 2 * u : 0)
+    (props.mode === Mode.ProblemEdit ? 5 * 2 * u : 0)
 );
 
 const viewBox = computed(() => {

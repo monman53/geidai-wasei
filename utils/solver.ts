@@ -2,7 +2,7 @@ export const chordSolver = (
   harmonies: Harmony[],
   key: Key,
   standard: boolean = true,
-  topN: number = 1 << 12
+  topN: number = 1 << 13
 ): Music[] => {
   let musics: Music[] = [new Music([], 0)];
   let prevHarmony = undefined;

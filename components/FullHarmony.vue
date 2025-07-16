@@ -18,18 +18,18 @@ const ledger2ys = computed(() => {
   if (
     props.harmony.bas !== null &&
     props.harmony.ten !== null &&
-    props.mode !== Mode.BassEdit
+    props.mode !== Mode.ProblemEdit
   ) {
     m = Math.max(props.harmony.bas, props.harmony.ten);
   } else if (
     props.harmony.bas === null &&
     props.harmony.ten !== null &&
-    props.mode !== Mode.BassEdit
+    props.mode !== Mode.ProblemEdit
   ) {
     m = props.harmony.ten;
   } else if (
     (props.harmony.ten === null && props.harmony.bas !== null) ||
-    (props.mode === Mode.BassEdit && props.harmony.bas !== null)
+    (props.mode === Mode.ProblemEdit && props.harmony.bas !== null)
   ) {
     m = props.harmony.bas;
   } else {
@@ -94,9 +94,9 @@ const playChord = () => {
 
   const frequencies = [
     props.harmony.bas,
-    props.mode !== Mode.BassEdit ? props.harmony.ten : null,
-    props.mode !== Mode.BassEdit ? props.harmony.alt : null,
-    props.mode !== Mode.BassEdit ? props.harmony.sop : null,
+    props.mode !== Mode.ProblemEdit ? props.harmony.ten : null,
+    props.mode !== Mode.ProblemEdit ? props.harmony.alt : null,
+    props.mode !== Mode.ProblemEdit ? props.harmony.sop : null,
   ].map((degree) => {
     return degree !== null ? degreeToFreq(degree) : 0;
   });
@@ -185,7 +185,7 @@ const setChord = (chord: Chord) => {
   </text>
   <!-- ten -->
   <text
-    v-if="harmony.ten !== null && mode !== Mode.BassEdit"
+    v-if="harmony.ten !== null && mode !== Mode.ProblemEdit"
     :x="x"
     :y="u * 3 + -2 * harmony.ten"
     class="bravura-text"
@@ -194,7 +194,7 @@ const setChord = (chord: Chord) => {
   </text>
   <!-- alt -->
   <text
-    v-if="harmony.alt !== null && mode !== Mode.BassEdit"
+    v-if="harmony.alt !== null && mode !== Mode.ProblemEdit"
     :x="x"
     :y="-u * 3 + -2 * harmony.alt"
     class="bravura-text"
@@ -203,7 +203,7 @@ const setChord = (chord: Chord) => {
   </text>
   <!-- sop -->
   <text
-    v-if="harmony.sop !== null && mode !== Mode.BassEdit"
+    v-if="harmony.sop !== null && mode !== Mode.ProblemEdit"
     :x="x"
     :y="-u * 3 + -2 * harmony.sop"
     class="bravura-text"
@@ -211,7 +211,7 @@ const setChord = (chord: Chord) => {
     &#xe1d3;
   </text>
   <!-- 加線 -->
-  <g v-if="mode !== Mode.BassEdit">
+  <g v-if="mode !== Mode.ProblemEdit">
     <text
       v-for="(y, i) in ledger4ys"
       :key="i"
@@ -253,7 +253,7 @@ const setChord = (chord: Chord) => {
     @pointerleave="handleInteractionEnd"
     @pointerup="handleInteractionEnd"
   />
-  <g v-if="mode === Mode.BassEdit">
+  <g v-if="mode === Mode.ProblemEdit">
     <g
       v-for="(bas, i) in [-11, -10, -9, -8, -7, -6, -5, -4, -3, -2, -1, 0, 1]"
       :key="i"

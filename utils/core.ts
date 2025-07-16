@@ -9,7 +9,7 @@ export class IsDraggingHandler {
 }
 
 export enum Mode {
-  BassEdit,
+  ProblemEdit,
   Solve,
   View,
 }
