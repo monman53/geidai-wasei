@@ -30,7 +30,7 @@ onUnmounted(() => {
 
 <template>
   <div>
-    <h1>藝大和声 I 巻</h1>
+    <h1 class="text-3xl font-bold">藝大和声 I 巻</h1>
     <label>
       <input type="radio" v-model="mode" :value="Mode.BassEdit" />
       バス課題作成
