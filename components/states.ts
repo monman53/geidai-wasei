@@ -36,3 +36,20 @@ export const harmonies = ref<Harmony[]>([
 ]);
 
 export const musics = ref<Music[]>([]);
+
+// Voice range for debug
+export const voiceRanges_ = [
+  new Harmony(Key.C, Chord.I, -11, -7, -3, 0),
+  new Harmony(Key.C, Chord.I, -10, -6, -2, 1),
+  new Harmony(Key.C, Chord.I, -9, -5, -1, 2),
+  new Harmony(Key.C, Chord.I, -8, -4, 0, 3),
+  new Harmony(Key.C, Chord.I, -7, -3, 1, 4),
+  new Harmony(Key.C, Chord.I, -6, -2, 2, 5),
+  new Harmony(Key.C, Chord.I, -5, -1, 3, 6),
+  new Harmony(Key.C, Chord.I, -4, 0, 4, 7),
+  new Harmony(Key.C, Chord.I, -3, 1, 5, 8),
+  new Harmony(Key.C, Chord.I, -2, 2, 6, 9),
+  new Harmony(Key.C, Chord.I, -1, 3, 7, 10),
+  new Harmony(Key.C, Chord.I, 0, 4, 8, 11),
+  new Harmony(Key.C, Chord.I, 1, 5, 8, 12),
+];
