@@ -1,6 +1,8 @@
-<script setup lang="ts">
+<script lang="ts">
 import bravuraMetadata from "@/assets/bravura_metadata.json";
+</script>
 
+<script setup lang="ts">
 const props = defineProps<{
   harmonies: Harmony[] | FixedHarmony[];
   mode: Mode;
@@ -33,11 +35,27 @@ const svgWidth = computed(() => {
 const svgHeight = computed(() => {
   return props.svgScale * vHeight.value;
 });
+const isDraggingHandler = new IsDraggingHandler();
 </script>
 
 <template>
   <div>
-    <svg :width="svgWidth" :height="svgHeight" :view-box.camel="viewBox">
+    <svg
+      :width="svgWidth"
+      :height="svgHeight"
+      :view-box.camel="viewBox"
+      @pointerup="
+        () => {
+          console.log('pointer-up');
+          isDraggingHandler.stopDragging();
+        }
+      "
+      @pointercancel="
+        () => {
+          isDraggingHandler.stopDragging();
+        }
+      "
+    >
       <!-- <svg width="800" height="200" viewBox="-200 -50 400 100"> -->
       <!-- 五線 -->
       <line
@@ -80,6 +98,7 @@ const svgHeight = computed(() => {
         :staff-gap="8 * u"
         :x="24 + 16 * h_idx"
         :harmony="h"
+        :is-dragging-handler="isDraggingHandler"
       />
     </svg>
   </div>
@@ -103,6 +122,7 @@ const svgHeight = computed(() => {
 
 svg {
   border: 1px solid #ccc;
+  touch-action: none;
 }
 
 .bravura-text {
