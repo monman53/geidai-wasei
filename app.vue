@@ -1,23 +1,6 @@
 <script setup lang="ts">
 import { getAudioContext, harmonies, musics } from "./components/states";
 
-// Voice range
-const harmonies2 = [
-  new Harmony(Key.C, Chord.I, -11, -7, -3, 0),
-  new Harmony(Key.C, Chord.I, -10, -6, -2, 1),
-  new Harmony(Key.C, Chord.I, -9, -5, -1, 2),
-  new Harmony(Key.C, Chord.I, -8, -4, 0, 3),
-  new Harmony(Key.C, Chord.I, -7, -3, 1, 4),
-  new Harmony(Key.C, Chord.I, -6, -2, 2, 5),
-  new Harmony(Key.C, Chord.I, -5, -1, 3, 6),
-  new Harmony(Key.C, Chord.I, -4, 0, 4, 7),
-  new Harmony(Key.C, Chord.I, -3, 1, 5, 8),
-  new Harmony(Key.C, Chord.I, -2, 2, 6, 9),
-  new Harmony(Key.C, Chord.I, -1, 3, 7, 10),
-  new Harmony(Key.C, Chord.I, 0, 4, 8, 11),
-  new Harmony(Key.C, Chord.I, 1, 5, 8, 12),
-];
-
 const mode = ref<Mode>(Mode.BassEdit);
 
 onUnmounted(() => {
@@ -30,7 +13,7 @@ onUnmounted(() => {
 
 <template>
   <div>
-    <h1>藝大和声 I 巻</h1>
+    <h1 class="text-3xl font-bold">藝大和声 I 巻</h1>
     <label>
       <input type="radio" v-model="mode" :value="Mode.BassEdit" />
       バス課題作成
@@ -60,9 +43,5 @@ onUnmounted(() => {
         />
       </div>
     </div>
-    <details>
-      <summary>Debug</summary>
-      <FullScore :harmonies="harmonies2" :mode="mode" :svg-scale="3" />
-    </details>
   </div>
 </template>

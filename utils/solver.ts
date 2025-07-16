@@ -83,9 +83,8 @@ export const chordSolver = (
               if (standard) {
                 if (!standardLeading(prevHarmony, nextHarmony)) continue;
               }
-              // # スコア付け
-              // penalty = calc_score(prev_harmony, next_harmony)
-              const penalty = 0;
+              // スコア付け
+              const penalty = calcPenalty(prevHarmony, nextHarmony);
               // 和音を追加
               nextMusics.push(
                 new Music(
@@ -98,9 +97,9 @@ export const chordSolver = (
         }
       }
     }
+    nextMusics.sort((a, b) => a.penalty - b.penalty);
     // 上位 top_n 件を残す
     if (nextMusics.length > topN) {
-      nextMusics.sort((a, b) => a.penalty - b.penalty);
       nextMusics = nextMusics.slice(0, topN);
     }
     musics = nextMusics;
