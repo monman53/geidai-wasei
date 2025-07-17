@@ -125,7 +125,7 @@ const isDraggingHandler = new IsDraggingHandler();
 }
 
 svg {
-  border: 1px solid #ccc;
+  /* border: 1px solid #ccc; */
   touch-action: none;
 }
 
