@@ -7,7 +7,7 @@ const props = defineProps<{
   u: number;
   idx: number;
   staffGap: number;
-  harmony: Harmony;
+  harmony: Harmony | FixedHarmony;
   x: number;
   isDraggingHandler: IsDraggingHandler;
 }>();
@@ -163,9 +163,16 @@ onUnmounted(() => {
 
 // バス設定
 const setBass = (bass: number) => {
-  harmonies.value[props.idx].bas = bass;
-  harmonies.value[props.idx].chord = null;
-  playChord();
+  if (harmonies.value[props.idx].bas !== bass) {
+    harmonies.value[props.idx].bas = bass;
+    harmonies.value[props.idx].basFixed = true;
+    harmonies.value[props.idx].chord = null;
+    playChord();
+  } else {
+    harmonies.value[props.idx].bas = null;
+    harmonies.value[props.idx].basFixed = false;
+    harmonies.value[props.idx].chord = null;
+  }
 };
 const setChord = (chord: Chord) => {
   harmonies.value[props.idx].chord = chord;
@@ -180,6 +187,7 @@ const setChord = (chord: Chord) => {
     :x="x"
     :y="u * 3 + -2 * harmony.bas"
     class="bravura-text"
+    :class="{ 'fill-blue-700': !harmony.basFixed }"
   >
     &#xe1d4;
   </text>
@@ -189,6 +197,7 @@ const setChord = (chord: Chord) => {
     :x="x"
     :y="u * 3 + -2 * harmony.ten"
     class="bravura-text"
+    :class="{ 'fill-blue-700': !harmony.tenFixed }"
   >
     &#xe1d3;
   </text>
@@ -198,6 +207,7 @@ const setChord = (chord: Chord) => {
     :x="x"
     :y="-u * 3 + -2 * harmony.alt"
     class="bravura-text"
+    :class="{ 'fill-blue-700': !harmony.altFixed }"
   >
     &#xe1d4;
   </text>
@@ -207,6 +217,7 @@ const setChord = (chord: Chord) => {
     :x="x"
     :y="-u * 3 + -2 * harmony.sop"
     class="bravura-text"
+    :class="{ 'fill-blue-700': !harmony.sopFixed }"
   >
     &#xe1d3;
   </text>
@@ -318,7 +329,6 @@ const setChord = (chord: Chord) => {
   fill: #0006;
 }
 
-/* isPlayingがtrueの時にactiveクラスが付与されます */
 .play-rect.active {
   fill: #00f4;
 }
