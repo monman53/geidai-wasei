@@ -1,5 +1,50 @@
 import { mod } from "./utils";
 
+export class Harmony {
+  constructor(
+    public key: Key,
+    public chord: Chord | null = null,
+    public bas: number | null = null,
+    public ten: number | null = null,
+    public alt: number | null = null,
+    public sop: number | null = null,
+    public basFixed: boolean = false,
+    public tenFixed: boolean = false,
+    public altFixed: boolean = false,
+    public sopFixed: boolean = false
+  ) {}
+}
+
+export class FixedHarmony {
+  constructor(
+    public key: Key,
+    public chord: Chord,
+    public bas: number,
+    public ten: number,
+    public alt: number,
+    public sop: number,
+    public basFixed: boolean = true,
+    public tenFixed: boolean = true,
+    public altFixed: boolean = true,
+    public sopFixed: boolean = true
+  ) {}
+
+  getHarmony = () => {
+    return new Harmony(
+      this.key,
+      this.chord,
+      this.bas,
+      this.ten,
+      this.alt,
+      this.sop
+    );
+  };
+}
+
+export class Music {
+  constructor(public harmonies: FixedHarmony[], public penalty: number) {}
+}
+
 export enum Chord {
   // 3和音
   // 基本位置
@@ -60,39 +105,6 @@ export const V9s = [Chord.V9, Chord.V9_1_, Chord.V9_2_, Chord.V9_3_];
 
 export enum Key {
   C,
-}
-
-export class Harmony {
-  constructor(
-    public key: Key,
-    public chord: Chord | null = null,
-    public bas: number | null = null,
-    public ten: number | null = null,
-    public alt: number | null = null,
-    public sop: number | null = null
-  ) {}
-}
-
-export class FixedHarmony {
-  constructor(
-    public key: Key,
-    public chord: Chord,
-    public bas: number,
-    public ten: number,
-    public alt: number,
-    public sop: number
-  ) {}
-
-  getHarmony = () => {
-    return new Harmony(
-      this.key,
-      this.chord,
-      this.bas,
-      this.ten,
-      this.alt,
-      this.sop
-    );
-  };
 }
 
 export const chordToYuzuri = (chord: Chord) => {
@@ -249,10 +261,6 @@ export const chordBas = (chord: Chord): number => {
       return -1;
   }
 };
-
-export class Music {
-  constructor(public harmonies: FixedHarmony[], public penalty: number) {}
-}
 
 export const voiceRange = (key: Key) => {
   switch (key) {

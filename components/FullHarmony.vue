@@ -7,7 +7,7 @@ const props = defineProps<{
   u: number;
   idx: number;
   staffGap: number;
-  harmony: Harmony;
+  harmony: Harmony | FixedHarmony;
   x: number;
   isDraggingHandler: IsDraggingHandler;
 }>();
@@ -163,9 +163,16 @@ onUnmounted(() => {
 
 // バス設定
 const setBass = (bass: number) => {
-  harmonies.value[props.idx].bas = bass;
-  harmonies.value[props.idx].chord = null;
-  playChord();
+  if (harmonies.value[props.idx].bas !== bass) {
+    harmonies.value[props.idx].bas = bass;
+    harmonies.value[props.idx].basFixed = true;
+    harmonies.value[props.idx].chord = null;
+    playChord();
+  } else {
+    harmonies.value[props.idx].bas = null;
+    harmonies.value[props.idx].basFixed = false;
+    harmonies.value[props.idx].chord = null;
+  }
 };
 const setChord = (chord: Chord) => {
   harmonies.value[props.idx].chord = chord;
@@ -180,6 +187,7 @@ const setChord = (chord: Chord) => {
     :x="x"
     :y="u * 3 + -2 * harmony.bas"
     class="bravura-text"
+    :class="{ 'fill-blue-700': !harmony.basFixed }"
   >
     &#xe1d4;
   </text>
@@ -189,6 +197,7 @@ const setChord = (chord: Chord) => {
     :x="x"
     :y="u * 3 + -2 * harmony.ten"
     class="bravura-text"
+    :class="{ 'fill-blue-700': !harmony.tenFixed }"
   >
     &#xe1d3;
   </text>
@@ -198,6 +207,7 @@ const setChord = (chord: Chord) => {
     :x="x"
     :y="-u * 3 + -2 * harmony.alt"
     class="bravura-text"
+    :class="{ 'fill-blue-700': !harmony.altFixed }"
   >
     &#xe1d4;
   </text>
@@ -207,6 +217,7 @@ const setChord = (chord: Chord) => {
     :x="x"
     :y="-u * 3 + -2 * harmony.sop"
     class="bravura-text"
+    :class="{ 'fill-blue-700': !harmony.sopFixed }"
   >
     &#xe1d3;
   </text>
@@ -232,12 +243,6 @@ const setChord = (chord: Chord) => {
   <text v-for="(y, i) in ledger2ys" :key="i" :x="x" :y="y" class="bravura-text"
     >&#xe022;</text
   >
-  <!-- 和音記号 -->
-  <g v-if="harmony.chord !== null">
-    <text :x="x" :y="staffGap / 2 + 4 * u + 5.5 * u" class="yuzuri-text">{{
-      chordToYuzuri(harmony.chord)
-    }}</text>
-  </g>
   <!-- UI -->
   <rect
     :x="x - u"
@@ -282,7 +287,7 @@ const setChord = (chord: Chord) => {
         :x="x"
         :y="staffGap / 2 + 4 * u + 5.5 * u + i * 2 * u"
         class="yuzuri-text pending-chord pointer pointable"
-        @mousedown="
+        @pointerdown="
           () => {
             setChord(chord);
           }
@@ -290,6 +295,22 @@ const setChord = (chord: Chord) => {
         >{{ chordToYuzuri(chord) }}</text
       >
     </g>
+  </g>
+  <!-- 和音記号 -->
+  <g v-if="harmony.chord !== null">
+    <text
+      :x="x"
+      :y="staffGap / 2 + 4 * u + 5.5 * u"
+      class="yuzuri-text pointer pointable"
+      @pointerdown="
+        () => {
+          if (mode === Mode.ProblemEdit) {
+            harmonies[idx].chord = null;
+          }
+        }
+      "
+      >{{ chordToYuzuri(harmony.chord) }}</text
+    >
   </g>
 </template>
 
@@ -318,7 +339,6 @@ const setChord = (chord: Chord) => {
   fill: #0006;
 }
 
-/* isPlayingがtrueの時にactiveクラスが付与されます */
 .play-rect.active {
   fill: #00f4;
 }
