@@ -243,12 +243,6 @@ const setChord = (chord: Chord) => {
   <text v-for="(y, i) in ledger2ys" :key="i" :x="x" :y="y" class="bravura-text"
     >&#xe022;</text
   >
-  <!-- 和音記号 -->
-  <g v-if="harmony.chord !== null">
-    <text :x="x" :y="staffGap / 2 + 4 * u + 5.5 * u" class="yuzuri-text">{{
-      chordToYuzuri(harmony.chord)
-    }}</text>
-  </g>
   <!-- UI -->
   <rect
     :x="x - u"
@@ -293,7 +287,7 @@ const setChord = (chord: Chord) => {
         :x="x"
         :y="staffGap / 2 + 4 * u + 5.5 * u + i * 2 * u"
         class="yuzuri-text pending-chord pointer pointable"
-        @mousedown="
+        @pointerdown="
           () => {
             setChord(chord);
           }
@@ -301,6 +295,22 @@ const setChord = (chord: Chord) => {
         >{{ chordToYuzuri(chord) }}</text
       >
     </g>
+  </g>
+  <!-- 和音記号 -->
+  <g v-if="harmony.chord !== null">
+    <text
+      :x="x"
+      :y="staffGap / 2 + 4 * u + 5.5 * u"
+      class="yuzuri-text pointer pointable"
+      @pointerdown="
+        () => {
+          if (mode === Mode.ProblemEdit) {
+            harmonies[idx].chord = null;
+          }
+        }
+      "
+      >{{ chordToYuzuri(harmony.chord) }}</text
+    >
   </g>
 </template>
 
