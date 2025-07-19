@@ -8,7 +8,7 @@ const props = defineProps<{
   mode: Mode;
   svgScale: number;
 }>();
-const u = 4;
+const u = 4.0;
 const width = computed(() => {
   return 6 * u + 4 * u * props.harmonies.length;
 });
@@ -39,11 +39,13 @@ const isDraggingHandler = new IsDraggingHandler();
 </script>
 
 <template>
-  <div>
+  <div class="container">
     <svg
       :width="svgWidth"
       :height="svgHeight"
       :view-box.camel="viewBox"
+      version="1.1"
+      xmlns="http://www.w3.org/2000/svg"
       @pointerleave="
         () => {
           isDraggingHandler.stopDragging();
@@ -100,7 +102,7 @@ const isDraggingHandler = new IsDraggingHandler();
         :u="u"
         :idx="h_idx"
         :staff-gap="8 * u"
-        :x="24 + 16 * h_idx"
+        :x="6 * u + 4 * u * h_idx"
         :harmony="h"
         :is-dragging-handler="isDraggingHandler"
       />
@@ -122,6 +124,16 @@ const isDraggingHandler = new IsDraggingHandler();
 .yuzuri-text {
   font-family: "Yuzuri", sans-serif;
   font-size: 0.35em;
+}
+
+.container {
+  width: 100%;
+}
+
+.container svg {
+  width: 100%;
+  height: auto;
+  /* display: block; */
 }
 
 svg {
