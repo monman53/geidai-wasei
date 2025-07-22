@@ -185,7 +185,7 @@ const setChord = (chord: Chord) => {
   <text
     v-if="harmony.bas !== null"
     :x="x"
-    :y="u * 3 + -2 * harmony.bas"
+    :y="u * 3 + (-u / 2) * harmony.bas"
     class="bravura-text"
     :class="{ 'fill-blue-700': !harmony.basFixed }"
   >
@@ -195,7 +195,7 @@ const setChord = (chord: Chord) => {
   <text
     v-if="harmony.ten !== null && mode !== Mode.ProblemEdit"
     :x="x"
-    :y="u * 3 + -2 * harmony.ten"
+    :y="u * 3 + -(u / 2) * harmony.ten"
     class="bravura-text"
     :class="{ 'fill-blue-700': !harmony.tenFixed }"
   >
@@ -205,7 +205,7 @@ const setChord = (chord: Chord) => {
   <text
     v-if="harmony.alt !== null && mode !== Mode.ProblemEdit"
     :x="x"
-    :y="-u * 3 + -2 * harmony.alt"
+    :y="-u * 3 + -(u / 2) * harmony.alt"
     class="bravura-text"
     :class="{ 'fill-blue-700': !harmony.altFixed }"
   >
@@ -215,7 +215,7 @@ const setChord = (chord: Chord) => {
   <text
     v-if="harmony.sop !== null && mode !== Mode.ProblemEdit"
     :x="x"
-    :y="-u * 3 + -2 * harmony.sop"
+    :y="-u * 3 + -(u / 2) * harmony.sop"
     class="bravura-text"
     :class="{ 'fill-blue-700': !harmony.sopFixed }"
   >

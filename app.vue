@@ -12,7 +12,7 @@ onUnmounted(() => {
 
 const musicRanges = computed(() => {
   const n = musics.value.length;
-  let ranges = [];
+  const ranges = [];
   for (let i = 0; i < Math.ceil(n / 10); i++) {
     ranges.push([i * 10, i * 10 + 10]);
   }
@@ -54,11 +54,11 @@ const resetHarmonies = () => {
     <div class="block border border-gray-200 p-2 my-2 shadow-sm rounded-lg">
       <div class="m-2">
         <label>
-          <input type="radio" v-model="mode" :value="Mode.ProblemEdit" />
+          <input v-model="mode" type="radio" :value="Mode.ProblemEdit" />
           課題作成
         </label>
         <label>
-          <input type="radio" v-model="mode" :value="Mode.Solve" />
+          <input v-model="mode" type="radio" :value="Mode.Solve" />
           実施
         </label>
       </div>
@@ -66,6 +66,7 @@ const resetHarmonies = () => {
       <div class="flex">
         <div class="m-2">
           <button
+            class="text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-800 rounded-lg text-sm px-3 py-2 pointer"
             @click="
               () => {
                 mode = Mode.Solve;
@@ -74,23 +75,22 @@ const resetHarmonies = () => {
                 musics = chordSolver(harmonies, Key.C);
               }
             "
-            class="text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-800 rounded-lg text-sm px-3 py-2 pointer"
           >
             自動実施
           </button>
         </div>
         <div v-if="mode === Mode.Solve" class="m-2">
           <button
-            @click="resetHarmonies"
             class="text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-800 rounded-lg text-sm px-3 py-2 pointer"
+            @click="resetHarmonies"
           >
             リセット
           </button>
         </div>
         <div v-if="mode === Mode.Solve && musics.length > 0" class="m-2">
           <button
-            @click="randomSelect"
             class="text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-800 rounded-lg text-sm px-3 py-2 pointer"
+            @click="randomSelect"
           >
             ランダム
           </button>
@@ -100,6 +100,7 @@ const resetHarmonies = () => {
     <div v-if="mode === Mode.Solve">
       <div
         v-for="(music, idx) in musics.slice(musicStart, musicEnd)"
+        :key="idx"
         class="block border border-gray-200 p-2 my-2 shadow-sm rounded-lg"
       >
         実施例: {{ musicStart + idx + 1 }} / {{ musics.length }}, Penalty:
@@ -110,15 +111,15 @@ const resetHarmonies = () => {
           :svg-scale="1.5"
         />
       </div>
-      <template v-for="[start, end] in musicRanges">
+      <template v-for="([start, end], idx) in musicRanges" :key="idx">
         <span
+          class="text-blue-600 underline pointer"
           @click="
             () => {
               musicStart = start;
               musicEnd = end;
             }
           "
-          class="text-blue-600 underline pointer"
         >
           {{ start }}-{{ end }}
         </span>
